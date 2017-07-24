@@ -147,14 +147,24 @@ class ConsultationTable {
 	 * Modifier le rpu_hospitalisation
 	 */
 	public function updateRpuHopitalisation($donneesRpuHospitalisation, $id_admission) {
+		
 		$db = $this->tableGateway->getAdapter();
 		$sql = new Sql($db);
 		$sQuery = $sql->update()
 		->table('rpu_hospitalisation')
 		->set($donneesRpuHospitalisation)
 		->where(array('id_admission_urgence' => $id_admission ));
-		
 		$sql->prepareStatementForSqlObject($sQuery)->execute();
+	}
+	
+	public function deleteRpuHospitalisation($id_admission){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->delete()
+		->from('rpu_hospitalisation')
+		->where(array('id_admission_urgence' => $id_admission ));
+		$stat = $sql->prepareStatementForSqlObject($sQuery);
+		$result = $stat->execute();
 	}
 	
 	/*===========================================================================*/
@@ -202,7 +212,15 @@ class ConsultationTable {
 		$sql->prepareStatementForSqlObject($sQuery)->execute();
 	}
 	
-	
+	public function deleteRpuTraumatisme($id_admission){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->delete()
+		->from('rpu_traumatisme')
+		->where(array('id_admission_urgence' => $id_admission ));
+		$stat = $sql->prepareStatementForSqlObject($sQuery);
+		$result = $stat->execute();
+	}
 	/*===========================================================================*/
 	/*===========================================================================*/
 	/*===========================================================================*/
@@ -247,6 +265,20 @@ class ConsultationTable {
 		->values($donneesRpuSortie);
 		$sql->prepareStatementForSqlObject($sQuery)->execute();
 	}
+	
+	public function deleteRpuSortie($id_admission){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->delete()
+		->from('rpu_sortie')
+		->where(array('id_admission_urgence' => $id_admission ));
+		$stat = $sql->prepareStatementForSqlObject($sQuery);
+		$result = $stat->execute();
+	}
+	
+	/*===========================================================================*/
+	/*===========================================================================*/
+	/*===========================================================================*/
 	
 	public function addBandelette($bandelettes){
 		$values = array();

@@ -317,6 +317,25 @@
     				//Appel de la fonction pour l'affichage des historiques et terrain particulier
     				historiqueTerrainParticulier(id_patient);
     				historiquesDesConsultations(id_patient,id_admission);
+    				
+    				//Blocage des champs et déblocage des champs pour le spécialiste
+    				setTimeout(function(){
+        				$('#bouton_valider_modifier, #bouton_constantes_valider_modifier').toggle(false);
+        				
+        				$('#niveauAlerte input, #mode_entree_reference input, #mode_entree_reference select, #BUcheckbox input,  #BUcheckbox select, #orientation_donnees input, #orientation_donnees select').attr('disabled', true);
+
+        				//Rpu Hospitalisation
+        				$('#rpu_hospitalisation_donnees input, #rpu_hospitalisation_donnees select, #rpu_hospitalisation_donnees textarea').attr('disabled', true);
+        				$('#avis_specialiste').attr('disabled', false).attr('readonly', false);
+        				
+        				//Rpu Traumatologie
+        				$('#rpu_traumatisme_donnees input, #rpu_traumatisme_donnees select, #rpu_traumatisme_donnees textarea').attr('disabled', true);
+        				$('#rpu_traumatisme_avis_specialiste_trauma, #rpu_traumatisme_conduite_specialiste').attr('disabled', false).attr('readonly', false);
+        				
+        				//Rpu de sortie
+        				$('#rpu_sortie_donnees input, #rpu_sortie_donnees select, #rpu_sortie_donnees textarea').attr('disabled', true);
+    				});
+    				
     			});
     				
     			$("#info_patient").html(result);
@@ -333,6 +352,7 @@
     	    		return false;
     	    		
     	    	});
+    			
     		}
     	});
     }

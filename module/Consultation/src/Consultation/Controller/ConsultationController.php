@@ -12,6 +12,8 @@ use Consultation\View\Helpers\RpuHospitalisationPdf2;
 use Consultation\View\Helpers\RpuHospitalisationPdf3;
 use Consultation\View\Helpers\RpuTraumatologiePdf;
 use Consultation\View\Helpers\RpuTraumatologiePdf2;
+use Consultation\View\Helpers\RpuSortiePdf;
+use Consultation\View\Helpers\RpuSortiePdf2;
 
 class ConsultationController extends AbstractActionController {
 	protected $patientTable;
@@ -275,7 +277,7 @@ class ConsultationController extends AbstractActionController {
 				$html .= "<script> setTimeout(function(){ $('#rouge' ).trigger('click'); $('#rouge' ).trigger('click');}); </script>";
 			}
 	
-			if($role == "medecin"){
+			if($role == "medecin" || $role == 'specialiste'){
 				if($admission->couloir == 1){
 					$html .="<script> setTimeout(function(){ $('#couloir').trigger('click'); }); </script>";
 				}else{
@@ -362,6 +364,7 @@ class ConsultationController extends AbstractActionController {
 		//Récupération du rpu_hospitalisation
 		//Récupération du rpu_hospitalisation
 		$rpu_hospitalisation = $this->getConsultationTable ()->getRpuHopitalisation($id_admission);
+		$html .="<script> var rpu_hospitalisation = 0;  </script>";
 		if($rpu_hospitalisation){
 			if($rpu_hospitalisation['resume_syndromique'] ){ $html .="<script> $('#resume_syndromique').val('".preg_replace("/(\r\n|\n|\r)/", "\\n",str_replace("'", "\'",$rpu_hospitalisation['resume_syndromique']))."'); </script>"; }
 			if($rpu_hospitalisation['hypotheses_diagnostiques'] ){ $html .="<script> $('#hypotheses_diagnostiques').val('".preg_replace("/(\r\n|\n|\r)/", "\\n",str_replace("'", "\'",$rpu_hospitalisation['hypotheses_diagnostiques']))."'); </script>"; }
@@ -373,11 +376,14 @@ class ConsultationController extends AbstractActionController {
 			if($rpu_hospitalisation['mise_a_jour_3'] ){ $html .="<script> $('#mise_a_jour_3').val('".preg_replace("/(\r\n|\n|\r)/", "\\n",str_replace("'", "\'",$rpu_hospitalisation['mise_a_jour_3']))."'); </script>"; }
 			if($rpu_hospitalisation['avis_specialiste'] ){ $html .="<script> $('#avis_specialiste').val('".preg_replace("/(\r\n|\n|\r)/", "\\n",str_replace("'", "\'",$rpu_hospitalisation['avis_specialiste']))."'); </script>"; }
 			if($rpu_hospitalisation['mutation'] ){ $html .="<script> $('#mutation').val('".preg_replace("/(\r\n|\n|\r)/", "\\n",str_replace("'", "\'",$rpu_hospitalisation['mutation']))."'); </script>"; }
+		
+			$html .="<script> var rpu_hospitalisation = 1;  </script>";
 		}
 	
 		//Récupération du rpu_traumatisme
 		//Récupération du rpu_traumatisme
 		$rpu_traumatisme = $this->getConsultationTable ()->getRpuTraumatisme($id_admission);
+		$html .="<script> var rpu_traumatisme = 0;  </script>";
 		if($rpu_traumatisme){
 			if($rpu_traumatisme['cote_dominant'] ){ $html .="<script> $('#rpu_traumatisme_cote_dominant').val('".preg_replace("/(\r\n|\n|\r)/", "\\n",str_replace("'", "\'",$rpu_traumatisme['cote_dominant']))."'); </script>"; }
 			if($rpu_traumatisme['date_histoire_maladie'] ){ $html .="<script> $('#rpu_traumatisme_date_heure').val('".preg_replace("/(\r\n|\n|\r)/", "\\n",str_replace("'", "\'",(new DateHelper())->convertDateTimeHm ($rpu_traumatisme['date_histoire_maladie'])))."'); </script>"; }
@@ -401,11 +407,14 @@ class ConsultationController extends AbstractActionController {
 			
 			if($rpu_traumatisme['avis_specialiste'] ){ $html .="<script> $('#rpu_traumatisme_avis_specialiste_trauma').val('".preg_replace("/(\r\n|\n|\r)/", "\\n",str_replace("'", "\'",$rpu_traumatisme['avis_specialiste']))."'); </script>"; }
 			if($rpu_traumatisme['conduite_a_tenir_specialiste'] ){ $html .="<script> $('#rpu_traumatisme_conduite_specialiste').val('".preg_replace("/(\r\n|\n|\r)/", "\\n",str_replace("'", "\'",$rpu_traumatisme['conduite_a_tenir_specialiste']))."'); </script>"; }
+		
+			$html .="<script> var rpu_traumatisme = 1;  </script>";
 		}
 		
 		//Récupération du rpu_sortie
 		//Récupération du rpu_sortie
 		$rpu_sortie = $this->getConsultationTable ()->getRpuSortie($id_admission);
+		$html .="<script> var rpu_sortie = 0;  </script>";
 		if($rpu_sortie){
 			if($rpu_sortie['diagnostic_principal'] ){ $html .="<script> $('#rpu_sortie_diagnostic_principal').val('".preg_replace("/(\r\n|\n|\r)/", "\\n",str_replace("'", "\'",$rpu_sortie['diagnostic_principal']))."'); </script>"; }
 			if($rpu_sortie['diagnostic_associe'] ){ $html .="<script> $('#rpu_sortie_diagnostic_associe').val('".preg_replace("/(\r\n|\n|\r)/", "\\n",str_replace("'", "\'",$rpu_sortie['diagnostic_associe']))."'); </script>"; }
@@ -421,11 +430,22 @@ class ConsultationController extends AbstractActionController {
 			}else if($rpu_sortie['mode_sortie']  == 6 ){
 				$html .="<script> $('#rpu_sortie_evacuation').val('".$rpu_sortie['type_mode_sortie']."'); </script>";
 			}
+			
+			$html .="<script> var rpu_sortie = 1;  </script>";
+		}
+		
+		
+		if($role == 'specialiste'){
+			$html .="<script> if(rpu_hospitalisation == 0){ $('.rpu_hospitalisation_donnees_onglet').toggle(false); } </script>";
+			$html .="<script> if(rpu_traumatisme == 0){ $('.rpu_traumatisme_donnees_onglet').toggle(false); }  </script>";
+			$html .="<script> if(rpu_sortie == 0){ $('.rpu_sortie_donnees_onglet').toggle(false); }  </script>";
 		}
 		
 		
 		if($historique == 1){
-			//$html .="<script> setTimeout(function(){ $('#motif_constantes input').attr('disabled', true); }, 1500); </script>";
+			$heure = "";
+			if($constantes){ $heure = " - ".$constantes['HEURECONS'];}
+			$html .="<script> $('#infoDateConsultation').html(' {<span style=\'font-weight: normal;\'> date de consultation :</span> ".(new DateHelper())->convertDate($admission->date).$heure." }'); </script>";
 		}
 		
 		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
@@ -509,10 +529,14 @@ class ConsultationController extends AbstractActionController {
 		
 		
 		$dateHeureRpuTrauma = $this->params ()->fromPost ( 'rpu_traumatisme_date_heure' );
-		$dateRpuTrauma = (new DateHelper())->convertDateInAnglais($dateHeureRpuTrauma);
-		$timeRpuTrauma = (new DateHelper())->getTimeInDateTimeDHM($dateHeureRpuTrauma);
-		$dateHeureRpuTraumaConvert = $dateRpuTrauma.' '.$timeRpuTrauma;
-		
+		if($dateHeureRpuTrauma){
+			$dateRpuTrauma = (new DateHelper())->convertDateInAnglais($dateHeureRpuTrauma);
+			$timeRpuTrauma = (new DateHelper())->getTimeInDateTimeDHM($dateHeureRpuTrauma);
+			$dateHeureRpuTraumaConvert = $dateRpuTrauma.' '.$timeRpuTrauma;
+		}else{
+			$dateHeureRpuTraumaConvert = '';
+		}
+
 		//POUR LES ANTECEDENTS ANTECEDENTS ANTECEDENTS
 		//POUR LES ANTECEDENTS ANTECEDENTS ANTECEDENTS
 		//POUR LES ANTECEDENTS ANTECEDENTS ANTECEDENTS
@@ -615,21 +639,22 @@ class ConsultationController extends AbstractActionController {
 			
 			//**** Donnees du RPU-Hospitalisation ****
 			//**** Donnees du RPU-Hospitalisation ****
+			$mutation = (int)$form->get ( "mutation" )->getValue ();
+			$mutation == 0 ? $mutation=null :  $mutation;
 			$donneesRpuHospitalisation = array(
 					'resume_syndromique'  => $form->get ( "resume_syndromique" )->getValue (),
 					'hypotheses_diagnostiques' => $form->get ( "hypotheses_diagnostiques" )->getValue (),
 					'examens_complementaires' => $form->get ( "examens_complementaires" )->getValue (),
 					'traitement' => $form->get ( "traitement" )->getValue (),
 					'resultats_examens_complementaires' => $form->get ( "resultats_examens_complementaires" )->getValue (),
-					//'avis_specialiste' => $form->get ( "avis_specialiste" )->getValue (),
-					'mutation' => $form->get ( "mutation" )->getValue (),
+					'mutation' => $mutation,
 					'mise_a_jour_1' => $form->get ( "mise_a_jour_1" )->getValue (),
 					'mise_a_jour_2' => $form->get ( "mise_a_jour_2" )->getValue (),
 					'mise_a_jour_3' => $form->get ( "mise_a_jour_3" )->getValue (),
 					
 					'id_employe' => $id_medecin,
 			);
-			
+			//var_dump($donneesRpuHospitalisation); exit();
 			//**** Donnees du RPU-Traumatisme ****
 			//**** Donnees du RPU-Traumatisme ****
 			$donneesRpuTraumatisme = array(
@@ -657,7 +682,7 @@ class ConsultationController extends AbstractActionController {
 					
 					'id_employe' => $id_medecin,
 			);
-			//var_dump($donneesRpuTraumatisme); exit();
+			
 			//**** Donnees du RPU-Sortie ****
 			//**** Donnees du RPU-Sortie ****
 			$donneesRpuSortie = array(
@@ -666,8 +691,6 @@ class ConsultationController extends AbstractActionController {
 					'traitement_sortie' => $form->get ( "rpu_sortie_traitement" )->getValue (),
 					'examens_complementaires_demandes' => $form->get ( "rpu_sortie_examens_complementaires_demandes" )->getValue (),
 					'mode_sortie' => $form->get ( "rpu_sortie_motif_sortie" )->getValue (),
-					
-					'id_employe' => $id_medecin,
 			);
 			
 			if( $donneesRpuSortie['mode_sortie'] == 4 ){
@@ -680,6 +703,9 @@ class ConsultationController extends AbstractActionController {
 				$donneesRpuSortie['type_mode_sortie'] = 0;
 			}
 			
+			$donneesRpuSortie['id_employe'] = $id_medecin;
+			
+			
 			//Modification des constantes
 			//Modification des constantes
 			$consultation_urgence = $this->getConsultationTable ()->getConsultationUrgence($id_admission);
@@ -687,7 +713,7 @@ class ConsultationController extends AbstractActionController {
 				$donneesConstantes['ID_MEDECIN'] = (int)$id_medecin;
 				if($donneesRpuHospitalisation['resume_syndromique'] || $donneesRpuHospitalisation['hypotheses_diagnostiques'] ||
 				   $donneesRpuTraumatisme['diagnostic'] ||  $donneesRpuTraumatisme['circonstances_maladie'] ||
-				   $donneesRpuSortie['diagnostic_sortie'] || $donneesRpuSortie['traitement_sortie'] 
+				   $donneesRpuSortie['diagnostic_principal'] || $donneesRpuSortie['traitement_sortie'] 
 			       ){
 					
 					$donneesConstantes['CONSPRISE']  = 1;
@@ -700,7 +726,6 @@ class ConsultationController extends AbstractActionController {
 				$this->getConsultationTable ()->addBandelette($bandelettes);
 			}
 			
-			
 			//**** ENREGISTREMENT DES DONNEES DE CONSULTATION DU MEDECIN
 			//**** ENREGISTREMENT DES DONNEES DE CONSULTATION DU MEDECIN
 			//**** ENREGISTREMENT DES DONNEES DE CONSULTATION DU MEDECIN
@@ -708,7 +733,15 @@ class ConsultationController extends AbstractActionController {
 			//**** RPU -- HOSPITALISATION
 			$rpu_hopitalisation = $this->getConsultationTable ()->getRpuHopitalisation($id_admission);
 			if($rpu_hopitalisation){
-				$this->getConsultationTable ()->updateRpuHopitalisation($donneesRpuHospitalisation, $id_admission);
+				$donneesRpuHospi = $donneesRpuHospitalisation;
+				$data = array_splice($donneesRpuHospitalisation, 0, -1);
+				
+				if(!$this->array_empty($data)){
+					$this->getConsultationTable ()->updateRpuHopitalisation($donneesRpuHospi, $id_admission);
+				}else{
+					$this->getConsultationTable ()->deleteRpuHospitalisation($id_admission);
+				}
+
 			}else{
 				$donneesRpuHospitalisation ['id_admission_urgence'] = $id_admission;
 				$donneesRpuHospitalisation ['date_enregistrement']  = $date.' '.$heure;
@@ -722,12 +755,20 @@ class ConsultationController extends AbstractActionController {
 			//**** RPU -- TRAUMATISME
 			$rpu_traumatisme = $this->getConsultationTable ()->getRpuTraumatisme($id_admission);
 			if($rpu_traumatisme){
-				$this->getConsultationTable ()->updateRpuTraumatisme($donneesRpuTraumatisme, $id_admission);
+				$donneesRpuTrauma = $donneesRpuTraumatisme;
+				$data = array_splice($donneesRpuTraumatisme, 0, -1);
+				
+				if(!$this->array_empty($data)){
+					$this->getConsultationTable ()->updateRpuTraumatisme($donneesRpuTrauma, $id_admission);
+				}else{
+					$this->getConsultationTable ()->deleteRpuTraumatisme($id_admission);
+				}
+				
 			}else{
 				$donneesRpuTraumatisme ['id_admission_urgence'] = $id_admission;
 				$donneesRpuTraumatisme ['date_enregistrement']  = $date.' '.$heure;
 				
-				if($donneesRpuTraumatisme['diagnostic'] || $donneesRpuTraumatisme['conduite_a_tenir'] ){
+				if($donneesRpuTraumatisme['cote_dominant'] || $donneesRpuTraumatisme['diagnostic'] || $donneesRpuTraumatisme['conduite_a_tenir'] ){
 					$this->getConsultationTable ()->addRpuTraumatisme($donneesRpuTraumatisme);
 				}
 			}
@@ -736,12 +777,20 @@ class ConsultationController extends AbstractActionController {
 			//**** RPU -- SORTIE
 			$rpu_sortie = $this->getConsultationTable ()->getRpuSortie($id_admission);
 			if($rpu_sortie){
-				$this->getConsultationTable ()->updateRpuSortie($donneesRpuSortie, $id_admission);
+				$donneesRpuSort = $donneesRpuSortie;
+				$data = array_splice($donneesRpuSortie, 0, -1);
+				
+				if(!$this->array_empty($data)){
+					$this->getConsultationTable ()->updateRpuSortie($donneesRpuSort, $id_admission);
+				}else{
+					$this->getConsultationTable ()->deleteRpuSortie($id_admission);
+				}
+
 			}else{
 				$donneesRpuSortie ['id_admission_urgence'] = $id_admission;
 				$donneesRpuSortie ['date_enregistrement']  = $date.' '.$heure;
 			
-				if($donneesRpuSortie['diagnostic_sortie'] || $donneesRpuSortie['traitement_sortie']){
+				if($donneesRpuSortie['diagnostic_principal'] || $donneesRpuSortie['traitement_sortie']){
 					$this->getConsultationTable ()->addRpuSortie($donneesRpuSortie);
 				}
 			}
@@ -750,12 +799,66 @@ class ConsultationController extends AbstractActionController {
 		
 		return $this->redirect ()->toRoute ('consultation', array ('action' => 'liste-patients-admis' ));
 	}
+	
 
+	public function enregistrementDonneesConsultationSpecialisteAction() {
+		$user = $this->layout()->user;
+		$role = $user['role'];
+		
+		$today = new \DateTime ();
+		$date = $today->format( 'Y-m-d' );
+		$heure = $today->format( 'H:i:s' );
+		
+		$form = new AdmissionForm();
+		$formData = $this->getRequest ()->getPost ();
+		$form->setData ( $formData );
+		
+		$id_cons = $form->get ( "id_cons" )->getValue ();
+		$id_patient = $this->params ()->fromPost( "id_patient" );
+		$id_medecin = $user['id_employe'];
+		
+		$id_admission = $this->params ()->fromPost( "id_admission" );
+		
+		//**** Donnees du RPU-Hospitalisation ****
+		//**** Donnees du RPU-Hospitalisation ****
+		$donneesRpuHospitalisation = array(
+				'avis_specialiste' => $form->get ( "avis_specialiste" )->getValue (),
+				'specialiste' => $id_medecin,
+		);
+		$rpu_hopitalisation = $this->getConsultationTable ()->getRpuHopitalisation($id_admission);
+		if($rpu_hopitalisation){
+			$this->getConsultationTable ()->updateRpuHopitalisation($donneesRpuHospitalisation, $id_admission);
+		}
+		//var_dump($donneesRpuHospitalisation); exit();
+		//**** Donnees du RPU-Traumatisme ****
+		//**** Donnees du RPU-Traumatisme ****
+		$donneesRpuTraumatisme = array(
+				'avis_specialiste' => $form->get ( "rpu_traumatisme_avis_specialiste_trauma" )->getValue (),
+				'conduite_a_tenir_specialiste' => $form->get ( "rpu_traumatisme_conduite_specialiste" )->getValue (),
+				'specialiste' => $id_medecin,
+		);
+		
+		$rpu_traumatisme = $this->getConsultationTable ()->getRpuTraumatisme($id_admission);
+		if($rpu_traumatisme){
+			$this->getConsultationTable ()->updateRpuTraumatisme($donneesRpuTraumatisme, $id_admission);
+		}
+			
+		//**** Donnees du RPU-Sortie ****
+		//**** Donnees du RPU-Sortie ****
+		//$donneesRpuSortie = array(
+		//		'specialiste' => $id_medecin,
+		//);
+		
+		
+		return $this->redirect ()->toRoute ('consultation', array ('action' => 'liste-patients-admis' ));
+	}
+	
 	
 	public function getHistoriquesTerrainParticulierAction() {
 		
 		$dateConvert = new DateHelper();
 		$id_patient = $this->params ()->fromPost( "id_patient" );
+		$infosPatient = $this->getPatientTable()->getInfoPatient($id_patient);
 		
 		//Enregistrement et mise à jour des données sur l'admission et la consultation
 		//Enregistrement et mise à jour des données sur l'admission et la consultation
@@ -946,6 +1049,9 @@ class ConsultationController extends AbstractActionController {
 		
 		$html .="<script> autocompletionAntecedent(myArrayAntMed); </script>";
 		
+		if($infosPatient['SEXE'] == 'Masculin'){
+			$html .="<script> $('.image4_AP').toggle(false); </script>";
+		}
 		
 		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
 		return $this->getResponse ()->setContent ( Json::encode ( $html ) );
@@ -1050,6 +1156,7 @@ class ConsultationController extends AbstractActionController {
 	public function listePatientsConsultesAction() {
 		$this->layout ()->setTemplate ( 'layout/consultation' );
 	
+		//var_dump($this->getPatientTable()->getListeAdmissionPatient(399)['date']); exit();
 		//INSTANCIATION DU FORMULAIRE D'ADMISSION
 		$formAdmission = new AdmissionForm ();
 		$listeSalles = $this->getPatientTable ()->listeSalles();
@@ -1063,6 +1170,53 @@ class ConsultationController extends AbstractActionController {
 				'temoin' => 0,
 		);
 	}
+	
+	
+	public function historiquePatientsConsultesAction() {
+		$this->layout ()->setTemplate ( 'layout/consultation' );
+		
+		//var_dump($this->getPatientTable()->getListeAdmissionPatient(399)); exit();
+		//INSTANCIATION DU FORMULAIRE D'ADMISSION
+		$formAdmission = new AdmissionForm ();
+		$listeSalles = $this->getPatientTable ()->listeSalles();
+		$formAdmission->get ( 'salle' )->setValueOptions ($listeSalles);
+	
+		$listeServices = $this->getPatientTable ()->listeService();
+	
+		$listeServiceMutation = $this->getPatientTable ()->listeServicesMutation();
+		$formAdmission->get ( 'mutation' )->setValueOptions ($listeServiceMutation);
+		$formAdmission->get ( 'rpu_sortie_liste_mutation' )->setValueOptions ($listeServiceMutation);
+	
+		$listeCircontances = $this->getPatientTable ()->listeCirconstances();
+		$formAdmission->get ( 'rpu_traumatisme_circonstances' )->setValueOptions ($listeCircontances);
+	
+		$listeCircontances = $this->getPatientTable ()->listeMecanismes();
+		$formAdmission->get ( 'rpu_traumatisme_mecanismes' )->setValueOptions ($listeCircontances);
+	
+		$listeDiagnostics = $this->getPatientTable ()->listeDiagnostic();
+		$formAdmission->get ( 'rpu_traumatisme_diagnostic' )->setValueOptions ($listeDiagnostics);
+	
+		$listeIndications = $this->getPatientTable ()->listeIndications();
+		$formAdmission->get ( 'rpu_traumatisme_indication' )->setValueOptions ($listeIndications);
+	
+		$listeMotifSortieRpuTraumato = $this->getPatientTable ()->listeMotifsSortieRpuTraumato();
+		$formAdmission->get ( 'rpu_traumatisme_motif_sortie' )->setValueOptions ($listeMotifSortieRpuTraumato);
+	
+		$listeMotifSortieRpuSortie = $this->getPatientTable ()->listeMotifsSortieRpuSortie();
+		$formAdmission->get ( 'rpu_sortie_motif_sortie' )->setValueOptions ($listeMotifSortieRpuSortie);
+	
+		$listeModeTransport = $this->getPatientTable ()->listeModeTransport();
+		$formAdmission->get ( 'mode_transport' )->setValueOptions ($listeModeTransport);
+	
+		$nbPatientAdmisInfimierService = $this->getPatientTable ()->nbPatientAdmisParInfirmierService();
+	
+		return array (
+				'form' => $formAdmission,
+				'temoin' => 0,
+				'nbPatientAdmisInfimierService' => $nbPatientAdmisInfimierService,
+		);
+	}
+	
 	
 	
 	public function impressionRpuHospitalisationAction(){
@@ -1596,6 +1750,225 @@ class ConsultationController extends AbstractActionController {
 					
 				$page3->addNoteTC();
 				$DocPdf->addPage($page3->getPage());
+			}
+			*/
+	
+		}
+	
+	
+		//Afficher le document contenant les pages
+		$DocPdf->getDocument();
+	}
+	
+	
+	public function impressionRpuSortieAction(){
+	
+		$control = new DateHelper();
+	
+		$user = $this->layout()->user;
+		$serviceMedecin = $user['NomService'];
+		$id_medecin = $user['id_employe'];
+	
+		$nomMedecin = $user['Nom'];
+		$prenomMedecin = $user['Prenom'];
+		$donneesMedecin = array('nomMedecin' => $nomMedecin, 'prenomMedecin' => $prenomMedecin);
+	
+		$id_patient = $this->params ()->fromPost ( 'id_patient', 0 );
+		$donneesPatient = $this->getConsultationTable()->getInfoPatient($id_patient);
+	
+		$id_admission = $this->params ()->fromPost ( 'id_admission', 0 );
+		$InfoAdmission = $this->getAdmissionTable()->getAdmissionUrgence($id_admission);
+	
+		$donnees = array();
+		//Récupération des données
+		$donnees['motif_consultation'] = $this->params ()->fromPost (  'motif_consultation' );
+	
+		$donnees['salle'] = $this->params ()->fromPost (  'salle' );
+		$donnees['lit'] = $this->params ()->fromPost (  'lit' );
+		$donnees['couloir'] = $this->params ()->fromPost (  'couloir' );
+	
+		/*=====================================================================*/
+		/*=====================================================================*/
+		
+		$donnees['diganostic'] = str_replace("â€™", "'", $this->params ()->fromPost (  'diganostic' ));
+		$donnees['diganostic'] = str_replace("œ", "oe" ,$donnees['diganostic']);
+		
+		$donnees['diganostic_associe'] = str_replace("â€™", "'", $this->params ()->fromPost (  'diganostic_associe' ));
+		$donnees['diganostic_associe'] = str_replace("œ", "oe" ,$donnees['diganostic_associe']);
+		
+		$donnees['traitement'] = str_replace("â€™", "'", $this->params ()->fromPost (  'traitement' ));
+		$donnees['traitement'] = str_replace("œ", "oe" ,$donnees['traitement']);
+		
+		$donnees['examens_complementaires_demandes'] = str_replace("â€™", "'", $this->params ()->fromPost (  'examens_complementaires_demandes' ));
+		$donnees['examens_complementaires_demandes'] = str_replace("œ", "oe" ,$donnees['examens_complementaires_demandes']);
+		
+		$donnees['mode_sortie'] = str_replace("â€™", "'", $this->params ()->fromPost (  'mode_sortie' ));
+		$donnees['mode_sortie'] = str_replace("œ", "oe" ,$donnees['mode_sortie']);
+		
+		$donnees['liste_mutation'] = str_replace("â€™", "'", $this->params ()->fromPost (  'liste_mutation' ));
+		$donnees['liste_mutation'] = str_replace("œ", "oe" ,$donnees['liste_mutation']);
+		
+		$donnees['transfert'] = str_replace("â€™", "'", $this->params ()->fromPost (  'transfert' ));
+		$donnees['transfert'] = str_replace("œ", "oe" ,$donnees['transfert']);
+		
+		$donnees['evacuation'] = str_replace("â€™", "'", $this->params ()->fromPost (  'evacuation' ));
+		$donnees['evacuation'] = str_replace("œ", "oe" ,$donnees['evacuation']);
+		
+
+		//Recuperer les informations sur les infirmiers
+		//Recuperer les informations sur les infirmiers
+		$infosInfirmiers = array();
+		if($InfoAdmission){
+			$id_infirmier_tri = $InfoAdmission->id_infirmier_tri;
+			$id_infirmier_service = $InfoAdmission->id_infirmier_service;
+			if($id_infirmier_tri){
+				$infos =  $this->getConsultationTable()->getInfosInfirmier($id_infirmier_tri);
+				$infosInfirmiers[$id_infirmier_tri] = $infos['PRENOM'].' '.$infos['NOM'];
+			}
+			if($id_infirmier_service){
+				if($id_medecin != $id_infirmier_service){
+					$infos =  $this->getConsultationTable()->getInfosInfirmier($id_infirmier_service);
+					$infosInfirmiers[$id_infirmier_service] = $infos['PRENOM'].' '.$infos['NOM'];
+				}else{
+					$infosInfirmiers[$id_infirmier_service] = "";
+				}
+			}
+		}
+	
+		//Recuperation des informations sur la consultation
+		//Recuperation des informations sur la consultation
+		$constantes = $this->getConsultationTable()->getConsultationParIdAdmission($id_admission);
+		if($constantes){
+			$donnees['dateConsultation'] = $control->convertDate($constantes['DATEONLY']);
+		}else{
+			$today = new \DateTime ();
+			$date = $today->format( 'd/m/Y' );
+			$donnees['dateConsultation'] = $date;
+		}
+	
+		$listeSalles = $this->getPatientTable()->listeSalles();
+		$listeLits = $this->getPatientTable()->listeLits();
+		$listeServiceMutation = $this->getPatientTable ()->listeServicesMutation();
+		$listeCirconstances = $this->getPatientTable ()->listeCirconstances();
+		$listeMecanismes = $this->getPatientTable ()->listeMecanismes();
+		$listeIndications = $this->getPatientTable ()->listeIndications();
+		$listeDiagnostics = $this->getPatientTable ()->listeDiagnostic();
+		$listeModeSortie = $this->getPatientTable ()->listeMotifsSortieRpuSortie();
+	
+		//CREATION DU DOCUMENT PDF
+		//Créer le document
+		$DocPdf = new DocumentPdf();
+	
+		//Créer la page 1
+		$page1 = new RpuSortiePdf();
+	
+		$page1->setService($serviceMedecin);
+		$page1->setInfoAdmission($InfoAdmission);
+	
+		//Envoi des données du patient
+		$page1->setDonneesPatientTC($donneesPatient);
+		//Envoi des données du medecin
+		$page1->setDonneesMedecinTC($donneesMedecin);
+		//Envoi des données des infirmiers
+		$page1->setDonneesInfosInfirmiers($infosInfirmiers);
+		//Envoi de la liste des salles et des lits et service de mutation
+		$page1->setListeSalles($listeSalles);
+		$page1->setListeLits($listeLits);
+		$page1->setListeServiceMutation($listeServiceMutation);
+		$page1->setListeCirconstances($listeCirconstances);
+		$page1->setListeMecanismes($listeMecanismes);
+		$page1->setListeIndications($listeIndications);
+		$page1->setListeDiagnostics($listeDiagnostics);
+		$page1->setListeModeSortie($listeModeSortie);
+	
+	
+		//Envoi les données de la demande
+		$page1->setDonneesDemandeTC($donnees);
+	
+		//Ajouter les donnees a la page
+		$page1->addNoteTC();
+		//Ajouter la page au document
+		$DocPdf->addPage($page1->getPage());
+	
+ 		$textInfos1 = $page1->getTextInfos1();
+ 		$textInfos2 = $page1->getTextInfos2();
+ 		$textInfos3 = $page1->getTextInfos3();
+ 		$textInfos4 = $page1->getTextInfos4();
+ 		$textInfos5 = $page1->getTextInfos5();
+ 		$textInfos6 = $page1->getTextInfos6();
+ 		$textInfos7 = $page1->getTextInfos7();
+ 		$textInfos8 = $page1->getTextInfos8();
+			
+		$nbLigne   = $page1->getNbLigne();
+		$nbTotalLigne = $page1->getNbTotalLigne();
+		$tableauTemoinLimite = $page1->getTableauTemoinLimite();
+		$tableauTemoinInfos  = $page1->getTableauTemoinInfos();
+	
+	
+		if($nbTotalLigne > 18 && $nbLigne < $nbTotalLigne){
+	
+			//Créer la page 2
+			$page2 = new RpuSortiePdf2();
+			$page2->setDonneesDemandeTC($donnees);
+				
+			$page2->setListeServiceMutation($listeServiceMutation);
+			$page2->setListeCirconstances($listeCirconstances);
+			$page2->setListeMecanismes($listeMecanismes);
+			$page2->setListeIndications($listeIndications);
+			$page2->setListeDiagnostics($listeDiagnostics);
+			$page2->setListeModeSortie($listeModeSortie);
+			//========================================================
+			//========================================================
+ 			$page2->setTextInfos1($textInfos1);
+ 			$page2->setTextInfos2($textInfos2);
+ 			$page2->setTextInfos3($textInfos3);
+ 			$page2->setTextInfos4($textInfos4);
+ 			$page2->setTextInfos5($textInfos5);
+ 			$page2->setTextInfos6($textInfos6);
+ 			$page2->setTextInfos7($textInfos7);
+ 			$page2->setTextInfos8($textInfos8);
+
+			
+			//========================================================
+			//========================================================
+			$page2->setTableauTemoinInfos($tableauTemoinInfos);
+			$page2->setTableauTemoinLimite($tableauTemoinLimite);
+	
+			$page2->addNoteTC();
+			$DocPdf->addPage($page2->getPage());
+	
+			//var_dump($tableauTemoinLimite); exit();
+	
+			//$suitePageRpu = $page2->getSuitePageRpu();
+		  
+			/*
+				if($suitePageRpu == 1){
+			//Créer la page 3
+			$page3 = new RpuHospitalisationPdf3();
+				
+			//$page3->setEntrerResumeSyndromique($entrerRS);
+			$page3->setEntrerHypothesesDiagnostics($entrerHD);
+			$page3->setEntrerExamenComplementaire($entrerEC);
+			$page3->setEntrerTraitement($entrerT);
+			$page3->setEntrerResultatExamenComplementaire($entrerREC);
+			$page3->setEntrerAvisSpecialiste($entrerAS);
+				
+				
+			//$page3->setTextResumeSyndromique($textRS);
+			$page3->setTextHypothesesDiagnostics($textHD);
+			$page3->setTextExamenComplementaire($textEC);
+			$page3->setTextTraitement($textT);
+			$page3->setTextResultatExamenComplementaire($textREC);
+			$page3->setTextMutation($textM);
+			$page3->setTextMiseAJour1($textM1);
+			$page3->setTextMiseAJour2($textM2);
+			$page3->setTextMiseAJour3($textM3);
+			$page3->setTextAvisSpecialiste($textAS);
+				
+			$page3->setTableauTemoinLimite($page2->getTableauTemoinLimitePage2());
+				
+			$page3->addNoteTC();
+			$DocPdf->addPage($page3->getPage());
 			}
 			*/
 	

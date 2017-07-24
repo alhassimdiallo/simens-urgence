@@ -666,7 +666,7 @@ class AdmissionForm extends Form{
 				'name' => 'rpu_traumatisme_cote_dominant',
 				'type' => 'Select',
 				'options' => array (
-						'label' => 'Cote dominant',
+						'label' => iconv('ISO-8859-1', 'UTF-8', 'Côté dominant'),
 						'value_options' => array (
 								'' => '',
 								1 => 'Droite', 
@@ -968,7 +968,7 @@ class AdmissionForm extends Form{
 		
 		$this->add(array(
 				'name' => 'rpu_sortie_examens_complementaires_demandes',
-				'type' => 'Text',
+				'type' => 'Textarea',
 				'options' => array (
 						'label' => iconv('ISO-8859-1', 'UTF-8','Examens complementaires demandées')
 				),

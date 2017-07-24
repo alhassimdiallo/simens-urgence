@@ -33,6 +33,7 @@ return array(
         		
         		'infirmier-tri' => 'guest',
         		'infirmier-service' => 'guest',
+        		'specialiste' => 'medecin',
         		
         ),
     		
@@ -185,6 +186,11 @@ return array(
     								
     								'impression-rpu-hospitalisation' => 'medecin',
     								'impression-rpu-traumatologie' => 'medecin',
+    								'impression-rpu-sortie' => 'medecin',
+    								
+    								
+    								'historique-patients-consultes' => 'medecin', 
+    								'enregistrement-donnees-consultation-specialiste' => 'specialiste',
     						
     						),
     				),

@@ -179,7 +179,6 @@ class AdminController extends AbstractActionController
     		return $this->redirect()->toRoute('admin', array('action' => 'login'));
     	}
     	
-    	//var_dump($user); exit();
     	if($user['role'] == "superAdmin")
     	{
     		return array(
@@ -203,53 +202,10 @@ class AdminController extends AbstractActionController
     	{
     		return $this->redirect()->toRoute('consultation', array('action' => 'liste-patients-admis'));
     	}
-    	
-    	//var_dump($user); exit();
-    	//LES ROLES NON ENCORE UTILISES
-    	//LES ROLES NON ENCORE UTILISES
-    	//LES ROLES NON ENCORE UTILISES
-    	
-//     	else if($user['role'] == "medecin")
-//     	{
-//     		return $this->redirect()->toRoute('consultation', array('action' => 'consultation-medecin'));
-//     	}
-//     	else if($user['role'] == "surveillant")
-//     	{
-//     		return $this->redirect()->toRoute('consultation', array('action' => 'recherche'));
-//     	}
-//     	else if($user['role'] == "infirmier")
-//     	{
-//     		return $this->redirect()->toRoute('hospitalisation', array('action' => 'suivi-patient'));
-//     	}
-//     	else if($user['role'] == "laborantin")
-//     	{
-//     		return $this->redirect()->toRoute('hospitalisation', array('action' => 'liste-demandes-examens'));
-//     	}
-//     	else if($user['role'] == "radiologie")
-//     	{
-//     		return $this->redirect()->toRoute('hospitalisation', array('action' => 'liste-demandes-examens-morpho'));
-//     	}
-//     	else if($user['role'] == "anesthesie")
-//     	{
-//     		return $this->redirect()->toRoute('hospitalisation', array('action' => 'liste-demandes-vpa'));
-//     	}
-//     	else if($user['role'] == "major")
-//     	{
-//     		return $this->redirect()->toRoute('hospitalisation', array('action' => 'demande-hospitalisation'));
-//     	}
-//     	else if($user['role'] == "facturation")
-//     	{
-//     		return $this->redirect()->toRoute('facturation', array('action' => 'admission'));
-//     	}
-//     	else if($user['role'] == "etat_civil")
-//     	{
-//     		return $this->redirect()->toRoute('facturation', array('action' => 'liste-naissance'));
-//     	}
-//     	else if($user['role'] == "archivage")
-//     	{
-//     		return $this->redirect()->toRoute('archivage', array('action' => 'ajouter'));
-//     	}
-    	
+    	else if($user['role'] == "specialiste")
+    	{
+    		return $this->redirect()->toRoute('consultation', array('action' => 'liste-patients-admis'));
+    	}
     	
     	
     	echo '<div style="font-size: 25px; color: green; padding-bottom: 15px;" >vous n\'avez aucun privilège. Contacter l\'administrateur ----> Merci !!! </div>'; 

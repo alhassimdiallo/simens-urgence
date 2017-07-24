@@ -120,7 +120,7 @@ $(window).load(function () {
                   <?php echo $this->formradio($form->get('role'));?>
                </div>
                <div id="LesChoixRadioPoly" style="float: left; border-top-right-radius: 15px; width: 50%; height: 100%; background: #f5f5f5; padding-left: 10px;"> 
-                  <?php echo $this->formradio($form->get('rolepolyclinique'));?>
+                  <?php //echo $this->formradio($form->get('rolepolyclinique'));?>
                </div>
              </div>
          </td> 
@@ -281,7 +281,6 @@ $('#confirmerpassword').blur(function(){
 
     var boutons = $('#LesChoixRadio input[name=role]');
 	$(boutons).click(function(){
-		boutonsPoly.attr('checked', false).attr('required', false);
 		
 		$('#role').attr('required', true);
 
@@ -292,70 +291,15 @@ $('#confirmerpassword').blur(function(){
 				$('#fonction').val('Médecin');
 			}else
 				if(boutons[2].checked){
-					$('#fonction').val('Surveillant');
+					$('#fonction').val('Infirmier de tri');
 				}else
 					if(boutons[3].checked){
-						$('#fonction').val('Laborantin');
+						$('#fonction').val('Infirmier de service');
 					}else
 						if(boutons[4].checked){
-							$('#fonction').val('Major');
-						}else
-							if(boutons[5].checked){
-								$('#fonction').val('Infirmier');
-							}else
-								if(boutons[6].checked){
-									$('#fonction').val('Radiologue');
-								}else
-									if(boutons[7].checked){
-										$('#fonction').val('Anesthésiste');
-									}else
-										if(boutons[8].checked){
-											$('#fonction').val('Caissier');
-										}else
-											if(boutons[9].checked){
-												$('#fonction').val('Resp. naiss');
-											}else
-												if(boutons[10].checked){
-													$('#fonction').val('Archiviste');
-												}else
-													if(boutons[11].checked){
-														$('#fonction').val('Infirmier de tri');
-													}else
-														if(boutons[12].checked){
-															$('#fonction').val('Infirmier de service');
-														}
+							$('#fonction').val('Spécialiste');
+						}
+							
 	});
 
-
-	var boutonsPoly = $('#LesChoixRadioPoly input[name=rolepolyclinique]');
-	$(boutonsPoly).click(function(){
-		boutons.attr('checked', false).attr('required', false);
-		
-		$('#rolepolyclinique').attr('required', true);
-
-		if(boutonsPoly[0].checked){
-			$('#fonction').val('Cardiologue');
-		}else
-			if(boutonsPoly[1].checked){
-				$('#fonction').val('Gynécologue');
-			}else
-				if(boutonsPoly[2].checked){
-					$('#fonction').val('Pédiatre');
-				}else
-					if(boutonsPoly[3].checked){
-						$('#fonction').val('Psychiatre');
-					}else
-						if(boutonsPoly[4].checked){
-							$('#fonction').val('Pneumologue');
-						}else
-							if(boutonsPoly[5].checked){
-								$('#fonction').val('ORL');
-							}else
-								if(boutonsPoly[6].checked){
-									$('#fonction').val('Kinésitérapeute');
-								}else
-									if(boutonsPoly[7].checked){
-										$('#fonction').val('Sage femme');
-									}
-	});
 </script>

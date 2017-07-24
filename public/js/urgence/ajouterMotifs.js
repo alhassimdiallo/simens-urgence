@@ -194,11 +194,11 @@ $(function(){
 	motif5.attr( 'readonly', false);
 	
 	$("#bouton_motif_valider").click(function(){
-		motif1.attr( 'readonly', true).css({'background':'#f8f8f8'});
-		motif2.attr( 'readonly', true).css({'background':'#f8f8f8'});
-		motif3.attr( 'readonly', true).css({'background':'#f8f8f8'});
-		motif4.attr( 'readonly', true).css({'background':'#f8f8f8'});
-		motif5.attr( 'readonly', true).css({'background':'#f8f8f8'});
+		motif1.attr( 'readonly', true);
+		motif2.attr( 'readonly', true);
+		motif3.attr( 'readonly', true);
+		motif4.attr( 'readonly', true);
+		motif5.attr( 'readonly', true);
 		$("#bouton_motif_modifier").toggle(true);
 		$("#bouton_motif_valider").toggle(false);
 		
@@ -210,11 +210,11 @@ $(function(){
 	});
 	
 	$("#bouton_motif_modifier").click(function(){
-		motif1.attr( 'readonly', false).css({'background':'#fff'});
-		motif2.attr( 'readonly', false).css({'background':'#fff'});
-		motif3.attr( 'readonly', false).css({'background':'#fff'});
-		motif4.attr( 'readonly', false).css({'background':'#fff'});
-		motif5.attr( 'readonly', false).css({'background':'#fff'});
+		motif1.attr( 'readonly', false);
+		motif2.attr( 'readonly', false);
+		motif3.attr( 'readonly', false);
+		motif4.attr( 'readonly', false);
+		motif5.attr( 'readonly', false);
 		$("#bouton_motif_modifier").toggle(false);
 		$("#bouton_motif_valider").toggle(true);
 		

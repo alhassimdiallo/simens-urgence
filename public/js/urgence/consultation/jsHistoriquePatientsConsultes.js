@@ -121,7 +121,7 @@
     						}
     				   },
 
-    				"sAjaxSource":  tabUrl[0] + "public/consultation/liste-patients-admis-infirmier-service-ajax",
+    				"sAjaxSource":  tabUrl[0] + "public/consultation/liste-patients-admis-infirmier-service-historique-ajax",
     				"fnDrawCallback": function() 
     				{
     					//markLine();
@@ -235,9 +235,9 @@
     	afficherInterfaceConsultation = 1;
     	
     	$(".termineradmission").html("<button id='termineradmission' style='height:35px;'>Terminer</button>");
-    	$(".annuleradmission" ).html("<button id='annuleradmission' style='height:35px;'>Annuler</button>");
+    	$(".annuleradmission" ).html("<button id='annuleradmission' style='height:35px;'>Terminer</button>");
     	
-    	$("#titre span").html("CONSULTATION DU PATIENT");
+    	$("#titre span").html("CONSULTATION DU PATIENT <span id='infoDateConsultation'></span>");
 
     	$('#contenu').fadeOut(function(){
         	$(".chargementPageModification").toggle(true);
@@ -297,7 +297,7 @@
     	$.ajax({
     		type : 'POST',
     		url : chemin,
-    		data : {'id_patient' : id_patient, 'id_admission' : id_admission},
+    		data : {'id_patient' : id_patient, 'id_admission' : id_admission, 'historique': 1},
     		success : function(data) {
     			var result = jQuery.parseJSON(data);
     			$(".chargementPageModification").fadeOut(function(){
@@ -317,6 +317,25 @@
     				//Appel de la fonction pour l'affichage des historiques et terrain particulier
     				historiqueTerrainParticulier(id_patient);
     				historiquesDesConsultations(id_patient,id_admission);
+    				
+    				//Blocage des champs et déblocage des champs pour le spécialiste
+    				setTimeout(function(){
+        				$('#bouton_valider_modifier, #bouton_constantes_valider_modifier, #controls_motifs').toggle(false);
+        				
+        				$('#niveauAlerte input, #mode_entree_reference input, #mode_entree_reference select, #BUcheckbox input,  #BUcheckbox select, #orientation_donnees input, #orientation_donnees select, #responde input, #respond input').attr('disabled', true);
+
+        				//Rpu Hospitalisation
+        				$('#rpu_hospitalisation_donnees input, #rpu_hospitalisation_donnees select, #rpu_hospitalisation_donnees textarea').attr('disabled', true);
+        				$('#avis_specialiste').attr('disabled', true);
+        				
+        				//Rpu Traumatologie
+        				$('#rpu_traumatisme_donnees input, #rpu_traumatisme_donnees select, #rpu_traumatisme_donnees textarea').attr('disabled', true);
+        				$('#rpu_traumatisme_avis_specialiste_trauma, #rpu_traumatisme_conduite_specialiste').attr('disabled', true);
+        				
+        				//Rpu de sortie
+        				$('#rpu_sortie_donnees input, #rpu_sortie_donnees select, #rpu_sortie_donnees textarea').attr('disabled', true);
+    				});
+    				
     			});
     				
     			$("#info_patient").html(result);
@@ -326,13 +345,14 @@
     	    		
     	    		$('#admission_urgence').fadeOut(function(){
     		    		$('#contenu').fadeIn();
-    		    		vart=tabUrl[0]+'public/consultation/liste-patients-admis';
+    		    		vart=tabUrl[0]+'public/consultation/historique-patients-consultes';
     		    	    $(location).attr("href",vart);
     		    	});
     	    		
     	    		return false;
     	    		
     	    	});
+    			
     		}
     	});
     }

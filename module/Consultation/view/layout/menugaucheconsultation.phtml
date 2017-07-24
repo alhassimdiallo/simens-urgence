@@ -46,7 +46,7 @@ $(window).load(function () {
 	      <span id="liste_admission_style" style="margin-left:5px; color: white; font-size:15px; font-family:Times New Roman;"><img style="margin-top: -7px;" src='<?php echo $this->basePath().'/images_icons/checklist.png'?>' /> Liste des admis</span></a>
 	   </div>
 
-	   <div style="margin-left:30px; height:40px;"><a href="<?php echo $this->basePath()."/consultation/liste-patients-consultes";?>">
+	   <div style="margin-left:30px; height:40px;"><a href="<?php echo $this->basePath()."/consultation/historique-patients-consultes";?>">
 	      <img style="margin-left:5px; margin-top: -10px;" src='<?php echo $this->basePath().'/images_icons/tasks.png'?>' />
 	      <span id="liste_consultes_style" style="font-size:15px; color: white; font-family:Times New Roman;">Historique</span></a>
 	   </div>
@@ -65,6 +65,8 @@ $role = $user['role'];
 if($role == 'superAdmin'){ ?>
 <script>  </script>
 <?php } else if($role == 'medecin'){ ?>
+<script> $('#dossier_patient').toggle(false); </script>
+<?php } else if($role == 'specialiste'){ ?>
 <script> $('#dossier_patient').toggle(false); </script>
 <?php } ?>
 

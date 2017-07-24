@@ -2480,7 +2480,26 @@ class PatientTable {
 	}
 	
 	
-	
+	public function getListeAdmissionPatient($id_patient){
+		$dateDuJour = (new \DateTime ("now"))->format ( 'Y-m-d' );
+		
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->select()
+		->from(array('pat' => 'patient'))->columns(array('*'))
+		->join(array('p' => 'personne'), 'pat.ID_PERSONNE = p.ID_PERSONNE' , array('Nom'=>'NOM','Prenom'=>'PRENOM','Datenaissance'=>'DATE_NAISSANCE', 'Age'=>'AGE', 'Sexe'=>'SEXE','Adresse'=>'ADRESSE','Nationalite'=>'NATIONALITE_ACTUELLE','Taille'=>'TAILLE','id'=>'ID_PERSONNE', 'id2'=>'ID_PERSONNE'))
+		->join(array('au' => 'admission_urgence'), 'au.id_patient = p.ID_PERSONNE' , array('Id_admission'=>'id_admission', 'Id_infirmier_tri'=>'id_infirmier_tri', 'Id_infirmier_service'=>'id_infirmier_service'))
+		->join(array('pers' => 'personne'), 'pers.ID_PERSONNE = au.id_infirmier_service', array('NomInfirmier'=>'NOM','PrenomInfirmier'=>'PRENOM','SexeInfirmier'=>'SEXE') )
+		
+		->join(array('cu' => 'consultation_urgence'), 'cu.id_admission_urgence = au.id_admission', array('Id_c'=>'id_cons') )
+		->join(array('cons' => 'consultation'), 'cons.ID_CONS = cu.id_cons', array('Consprise'=>'CONSPRISE', 'Date'=>'DATEONLY', 'Heure'=>'HEURECONS') )
+		->join(array('pers3' => 'personne'), 'pers3.ID_PERSONNE = cons.ID_MEDECIN', array( 'IdMedecin'=>'ID_PERSONNE', 'NomMedecin'=>'NOM','PrenomMedecin'=>'PRENOM','SexeMedecin'=>'SEXE') )
+		
+		->where( array ('pat.ID_PERSONNE' => $id_patient, 'au.date != ?' => $dateDuJour, 'au.id_infirmier_service != ?' => "" ) ) /* id_infirmier_service (( infirmier différent de null )) */
+		->order('id_admission DESC');
+		
+		return $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+	}
 	
 	/**
 	 * INTERFACE DU MEDECIN ------- LISTE DES PATIENTS
@@ -2540,10 +2559,12 @@ class PatientTable {
 	
 		->join(array('cu' => 'consultation_urgence'), 'cu.id_admission_urgence = au.id_admission', array('Id_c'=>'id_cons') )
 		->join(array('cons' => 'consultation'), 'cons.ID_CONS = cu.id_cons', array('Consprise'=>'CONSPRISE', 'Date'=>'DATEONLY', 'Heure'=>'HEURECONS') )
-	
+		->join(array('pers3' => 'personne'), 'pers3.ID_PERSONNE = cons.ID_MEDECIN', array( 'IdMedecin'=>'ID_PERSONNE', 'NomMedecin'=>'NOM','PrenomMedecin'=>'PRENOM','SexeMedecin'=>'SEXE') )
+		
 		->where( array ( 'au.date != ?' => $dateDuJour, 'au.id_infirmier_service != ?' => "" ) ) /* id_infirmier_service (( infirmier différent de null )) */
 	
-		->order('id_admission DESC');
+		->order('id_admission DESC')
+		->group('pat.ID_PERSONNE');
 	
 	
 		/* Data set length after filtering */
@@ -2590,16 +2611,13 @@ class PatientTable {
 						$row[] = "<span style='font-size: 19px;'>".$aRow[ $aColumns[$i]]."<span style='display: none;'> ".str_replace(' ', '' ,$aRow[ $aColumns[$i]])."</span></span>";
 					}
 	
-					else if ($aColumns[$i] == 'Datenaissance') {
-	
-						$date_naissance = $aRow[ $aColumns[$i] ];
-						if($date_naissance){ $row[] = $Control->convertDate($aRow[ $aColumns[$i] ]); }else{ $row[] = null;}
-							
-					}
-	
 					else if ($aColumns[$i] == 'Adresse') {
-						//$row[] = "<div style='max-height: 22px; overflow: hidden;'>". $this->adresseText($aRow[ $aColumns[$i] ]) ."</div>";
-						$row[] = $Control->convertDate($aRow[ 'Date' ]).' - '.$aRow['Heure'];
+						
+						$infoAdmission = $this->getListeAdmissionPatient($aRow[ 'id' ]);
+						$date = $infoAdmission['Date'];
+						$heure = $infoAdmission['Heure'];
+						
+						if($date){ $row[] = $Control->convertDate($date).' - '.$heure; }else{ $row[] = null;}
 					}
 	
 					else if ($aColumns[$i] == 'Nationalite') {
@@ -2607,7 +2625,10 @@ class PatientTable {
 					}
 	
 					else if ($aColumns[$i] == 'id') {
-						$html ="<infoBulleVue> <a href='javascript:consultation(".$aRow[ $aColumns[$i] ].",".$aRow[ 'Id_admission' ].")'>";
+						$infoAdmission = $this->getListeAdmissionPatient($aRow[ 'id' ]);
+						$id_admission = $infoAdmission['Id_admission'];
+						
+						$html ="<infoBulleVue> <a href='javascript:consultation(".$aRow[ $aColumns[$i] ].",".$id_admission.")'>";
 						$html .="<img style='display: inline; margin-right: 15%;' src='".$tabURI[0]."public/images_icons/voir2.png' title='Consulter'></a></infoBulleVue>";
 	
 						if(!$aRow[ 'Id_infirmier_tri' ]){
@@ -2618,9 +2639,9 @@ class PatientTable {
 							}
 								
 							if( $aRow[ 'Consprise' ] == 1 ){
-								$html .="<img style='display: inline; margin-right: 5%;' src='".$tabURI[0]."public/images_icons/tick_16.png' title='d&eacute;j&agrave; consult&eacute;'></a>";
+								//$html .="<img style='display: inline; margin-right: 5%;' src='".$tabURI[0]."public/images_icons/tick_16.png' title='d&eacute;j&agrave; consult&eacute;'></a>";
 							}else{
-								$html .="<img style='display: inline; margin-right: 5%;' src='".$tabURI[0]."public/images_icons/tickn_16.png' title='non consult&eacute; par un medecin' />";
+								//$html .="<img style='display: inline; margin-right: 5%;' src='".$tabURI[0]."public/images_icons/tickn_16.png' title='non consult&eacute; par un medecin' />";
 							}
 
 						
@@ -2628,10 +2649,10 @@ class PatientTable {
 						
 							if( $aRow[ 'Consprise' ] == 1 ){
 								$html .="<img style='opacity: 0; margin-right: 15%;' src='".$tabURI[0]."public/images_icons/infirmier.png' />";
-								$html .="<img style='display: inline; margin-right: 5%;' src='".$tabURI[0]."public/images_icons/tick_16.png' title='d&eacute;j&agrave; consult&eacute;' />";
+								//$html .="<img style='display: inline; margin-right: 5%;' src='".$tabURI[0]."public/images_icons/tick_16.png' title='d&eacute;j&agrave; consult&eacute;' />";
 							}else{
 								$html .="<img style='opacity: 0; margin-right: 15%;' src='".$tabURI[0]."public/images_icons/infirmier.png' />";
-								$html .="<img style='display: inline; margin-right: 5%;' src='".$tabURI[0]."public/images_icons/tickn_16.png' title='non consult&eacute; par un medecin' />";
+								//$html .="<img style='display: inline; margin-right: 5%;' src='".$tabURI[0]."public/images_icons/tickn_16.png' title='non consult&eacute; par un medecin' />";
 							}
 							
 						}
@@ -2704,6 +2725,8 @@ class PatientTable {
 				}
 			}
 		}
+		
+		$admission = $this->getListeAdmissionPatient($id_patient);
 	
 		/*
 		 * La liste des historiques des consultations du patient
@@ -2724,7 +2747,7 @@ class PatientTable {
 		->join(array('cons' => 'consultation'), 'cons.ID_CONS = cu.id_cons', array('Consprise'=>'CONSPRISE', 'Date'=>'DATEONLY', 'Heure'=>'HEURECONS') )
 		->join(array('pers3' => 'personne'), 'pers3.ID_PERSONNE = cons.ID_MEDECIN', array( 'IdMedecin'=>'ID_PERSONNE', 'NomMedecin'=>'NOM','PrenomMedecin'=>'PRENOM','SexeMedecin'=>'SEXE') )
 	
-		->where( array ( 'au.date != ?' => $dateDuJour, 'pat.ID_PERSONNE' => $id_patient ) ) 
+		->where( array ( 'au.date != ?' => $dateDuJour, 'pat.ID_PERSONNE' => $id_patient,  'cu.id_admission_urgence != ?' => $admission['Id_admission'] ) ) 
 	
 		->order('id_admission DESC');
 	

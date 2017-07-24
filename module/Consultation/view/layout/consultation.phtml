@@ -61,7 +61,7 @@
   <ul class="nav" style="width:100%;">
     <li  class="dropdown" style=" width: 30%;"><a title=""  class="dropdown-toggle">
       <i> <span style="color: white; font-size: 13px;">Service: </span></i>
-      <b class="caret" ></b> <span style="font-size: 15px; color: white; font-family: Times  New Roman;"><?php echo $service;?> <?php if($user['role'] == 'medecin'){ ?> <span style="color: #68f442;"> (M&eacute;decin)</span> <?php } ?></span></a>
+      <b class="caret" ></b> <span style="font-size: 15px; color: white; font-family: Times  New Roman;"><?php echo $service;?> <?php if($user['role'] == 'medecin'){ ?> <span style="color: #68f442;"> (M&eacute;decin)</span> <?php }else  if($user['role'] == 'specialiste'){ ?> <span style="color: #68f442;"> (Sp&eacute;cialiste)</span> <?php } ?></span></a>
     </li>
 
     <li  class="dropdown" style=" width: 53%;"><a title="" class="dropdown-toggle">
