@@ -577,7 +577,7 @@ class AdmissionForm extends Form{
 				),
 				'attributes' => array(
 						'id' => 'resume_syndromique',
-						'maxlength' => 1000,
+						//'maxlength' => 1000,
 				),
 		));
 		
@@ -589,7 +589,7 @@ class AdmissionForm extends Form{
 				),
 				'attributes' => array(
 						'id' => 'hypotheses_diagnostiques',
-						'maxlength' => 1000,
+						//'maxlength' => 1000,
 				),
 		));
 		
@@ -601,7 +601,7 @@ class AdmissionForm extends Form{
 				),
 				'attributes' => array(
 						'id' => 'examens_complementaires',
-						'maxlength' => 1000,
+						//'maxlength' => 1000,
 				),
 		));
 		
@@ -613,7 +613,7 @@ class AdmissionForm extends Form{
 				),
 				'attributes' => array(
 						'id' => 'traitement',
-						'maxlength' => 1000,
+						//'maxlength' => 1000,
 				),
 		));
 		
@@ -625,7 +625,7 @@ class AdmissionForm extends Form{
 				),
 				'attributes' => array(
 						'id' => 'resultats_examens_complementaires',
-						'maxlength' => 1000,
+						//'maxlength' => 1000,
 				),
 		));
 		
@@ -637,7 +637,7 @@ class AdmissionForm extends Form{
 				),
 				'attributes' => array(
 						'id' => 'avis_specialiste',
-						'maxlength' => 1500,
+						//'maxlength' => 1500,
 				),
 		));
 		
@@ -830,7 +830,7 @@ class AdmissionForm extends Form{
 				),
 				'attributes' => array(
 						'id' => 'rpu_traumatisme_avis_specialiste_trauma',
-						'maxlength' => 1500,
+						//'maxlength' => 1500,
 				),
 		));
 		

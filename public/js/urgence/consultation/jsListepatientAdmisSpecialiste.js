@@ -1476,8 +1476,9 @@
     	
     	var avis_specialiste = $('#avis_specialiste').val();
     	
-    	var vart =  tabUrl[0]+'public/consultation/impression-rpu-hospitalisation';
-		var FormulaireImprimerRPU = document.getElementById("FormulaireImprimerRPU");
+    	//var vart =  tabUrl[0]+'public/consultation/impression-rpu-hospitalisation';
+    	var vart =  tabUrl[0]+'public/consultation/imprimer-rpu-hospitalisation';
+    	var FormulaireImprimerRPU = document.getElementById("FormulaireImprimerRPU");
 		FormulaireImprimerRPU.setAttribute("action", vart);
 		FormulaireImprimerRPU.setAttribute("method", "POST");
 		FormulaireImprimerRPU.setAttribute("target", "_blank");

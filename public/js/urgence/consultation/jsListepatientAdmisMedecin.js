@@ -1443,6 +1443,7 @@
     	var salle = $('#salle').val();
     	var lit = $('#lit').val();
     	var couloir = $('#couloir').val();
+    	var niveau =  $('#niveauAlerte :radio:checked').val();
     	
     	var resume_syndromique       = $('#resume_syndromique').val();
     	var hypotheses_diagnostiques = $('#hypotheses_diagnostiques').val();
@@ -1456,7 +1457,8 @@
     	
     	var avis_specialiste = $('#avis_specialiste').val();
     	
-    	var vart =  tabUrl[0]+'public/consultation/impression-rpu-hospitalisation';
+    	//var vart =  tabUrl[0]+'public/consultation/impression-rpu-hospitalisation';
+    	var vart =  tabUrl[0]+'public/consultation/imprimer-rpu-hospitalisation';
 		var FormulaireImprimerRPU = document.getElementById("FormulaireImprimerRPU");
 		FormulaireImprimerRPU.setAttribute("action", vart);
 		FormulaireImprimerRPU.setAttribute("method", "POST");
@@ -1558,13 +1560,19 @@
 		champ15.setAttribute("value", motif_consultation);
 		FormulaireImprimerRPU.appendChild(champ15);
 		
+		var champ16 = document.createElement("input");
+		champ16.setAttribute("type", "hidden");
+		champ16.setAttribute("name", 'niveau');
+		champ16.setAttribute("value", niveau);
+		FormulaireImprimerRPU.appendChild(champ16);
+		
 		$("#ImpressionRPU").trigger('click');
     	
   	}
   	
   	//IMPRESSION DU Rpu-traumatologie
   	//IMPRESSION DU Rpu-traumatologie
-  	function imprimerRpuTraumatologie(){
+  	function imprimerRpuTraumatologie(){alert();
   		var id_patient = $('#id_patient').val();
     	var id_admission = $('#id_admission').val();
     	
@@ -1585,6 +1593,7 @@
     	var salle = $('#salle').val();
     	var lit = $('#lit').val();
     	var couloir = $('#couloir').val();
+    	var niveau =  $('#niveauAlerte :radio:checked').val();
     	
     	var cote_dominant                  = $('#rpu_traumatisme_cote_dominant').val();
     	var date_heure                     = $('#rpu_traumatisme_date_heure').val();
@@ -1607,6 +1616,7 @@
     	
     	
     	var vart =  tabUrl[0]+'public/consultation/impression-rpu-traumatologie';
+    	//var vart =  tabUrl[0]+'public/consultation/imprimer-rpu-traumatologie';
 		var FormulaireImprimerRPU = document.getElementById("FormulaireImprimerRPU");
 		FormulaireImprimerRPU.setAttribute("action", vart);
 		FormulaireImprimerRPU.setAttribute("method", "POST");
@@ -1755,6 +1765,12 @@
 		champ23.setAttribute("name", 'motif_consultation');
 		champ23.setAttribute("value", motif_consultation);
 		FormulaireImprimerRPU.appendChild(champ23);
+		
+		var champ24 = document.createElement("input");
+		champ24.setAttribute("type", "hidden");
+		champ24.setAttribute("name", 'niveau');
+		champ24.setAttribute("value", niveau);
+		FormulaireImprimerRPU.appendChild(champ24);
 		
 		$("#ImpressionRPU").trigger('click');
   	}

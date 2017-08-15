@@ -188,6 +188,8 @@ return array(
     								'impression-rpu-traumatologie' => 'medecin',
     								'impression-rpu-sortie' => 'medecin',
     								
+    								'imprimer-rpu-hospitalisation' => 'medecin',
+    								'imprimer-rpu-traumatologie' => 'medecin',
     								
     								'historique-patients-consultes' => 'medecin', 
     								'enregistrement-donnees-consultation-specialiste' => 'specialiste',
