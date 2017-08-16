@@ -721,16 +721,19 @@
 		if(id == 4){
 			$('#respond .rpu_sortie_input_choix span').toggle(false);
 			$('#element4').toggle(true);
+			$('#rpu_sortie_transfert, #rpu_sortie_evacuation').val('');
 		}else if(id == 5){
 			$('#respond .rpu_sortie_input_choix span').toggle(false);
 			$('#element5').toggle(true);
+			$('#rpu_sortie_liste_mutation, #rpu_sortie_evacuation').val('');
 		}else if(id == 6){
 			$('#respond .rpu_sortie_input_choix span').toggle(false);
 			$('#element6').toggle(true);
+			$('#rpu_sortie_liste_mutation, #rpu_sortie_transfert').val('');
 		}else{
 			$('#respond .rpu_sortie_input_choix span').toggle(false);
+			$('#rpu_sortie_liste_mutation, #rpu_sortie_transfert, #rpu_sortie_evacuation').val('');
 		}
-
 	}
 	
 	
@@ -1463,6 +1466,7 @@
     	var salle = $('#salle').val();
     	var lit = $('#lit').val();
     	var couloir = $('#couloir').val();
+    	var niveau =  $('#niveauAlerte :radio:checked').val();
     	
     	var resume_syndromique       = $('#resume_syndromique').val();
     	var hypotheses_diagnostiques = $('#hypotheses_diagnostiques').val();
@@ -1579,6 +1583,12 @@
 		champ15.setAttribute("value", motif_consultation);
 		FormulaireImprimerRPU.appendChild(champ15);
 		
+		var champ16 = document.createElement("input");
+		champ16.setAttribute("type", "hidden");
+		champ16.setAttribute("name", 'niveau');
+		champ16.setAttribute("value", niveau);
+		FormulaireImprimerRPU.appendChild(champ16);
+		
 		$("#ImpressionRPU").trigger('click');
     	
   	}
@@ -1606,6 +1616,7 @@
     	var salle = $('#salle').val();
     	var lit = $('#lit').val();
     	var couloir = $('#couloir').val();
+    	var niveau =  $('#niveauAlerte :radio:checked').val();
     	
     	var cote_dominant                  = $('#rpu_traumatisme_cote_dominant').val();
     	var date_heure                     = $('#rpu_traumatisme_date_heure').val();
@@ -1627,7 +1638,8 @@
     	var conduite_specialiste           = $('#rpu_traumatisme_conduite_specialiste').val();
     	
     	
-    	var vart =  tabUrl[0]+'public/consultation/impression-rpu-traumatologie';
+    	//var vart =  tabUrl[0]+'public/consultation/impression-rpu-traumatologie';
+    	var vart =  tabUrl[0]+'public/consultation/imprimer-rpu-traumatologie';
 		var FormulaireImprimerRPU = document.getElementById("FormulaireImprimerRPU");
 		FormulaireImprimerRPU.setAttribute("action", vart);
 		FormulaireImprimerRPU.setAttribute("method", "POST");
@@ -1777,6 +1789,12 @@
 		champ23.setAttribute("value", motif_consultation);
 		FormulaireImprimerRPU.appendChild(champ23);
 		
+		var champ24 = document.createElement("input");
+		champ24.setAttribute("type", "hidden");
+		champ24.setAttribute("name", 'niveau');
+		champ24.setAttribute("value", niveau);
+		FormulaireImprimerRPU.appendChild(champ24);
+		
 		$("#ImpressionRPU").trigger('click');
   	}
   	
@@ -1784,7 +1802,6 @@
   	//Impression du Rpu de sortie
   	function imprimerRpuSortie()
   	{
-
   		var id_patient = $('#id_patient').val();
     	var id_admission = $('#id_admission').val();
     	
@@ -1805,6 +1822,7 @@
     	var salle = $('#salle').val();
     	var lit = $('#lit').val();
     	var couloir = $('#couloir').val();
+    	var niveau =  $('#niveauAlerte :radio:checked').val();
     	
     	var diganostic                        = $('#rpu_sortie_diagnostic_principal').val();
     	var diganostic_associe                = $('#rpu_sortie_diagnostic_associe').val();
@@ -1816,7 +1834,8 @@
     	var evacuation                        = $('#rpu_sortie_evacuation').val();
     	
     	
-    	var vart =  tabUrl[0]+'public/consultation/impression-rpu-sortie';
+    	//var vart =  tabUrl[0]+'public/consultation/impression-rpu-sortie';
+    	var vart =  tabUrl[0]+'public/consultation/imprimer-rpu-sortie';
 		var FormulaireImprimerRPU = document.getElementById("FormulaireImprimerRPU");
 		FormulaireImprimerRPU.setAttribute("action", vart);
 		FormulaireImprimerRPU.setAttribute("method", "POST");
@@ -1905,6 +1924,12 @@
 		champ13.setAttribute("name", 'evacuation');
 		champ13.setAttribute("value", evacuation);
 		FormulaireImprimerRPU.appendChild(champ13);
+		
+		var champ14 = document.createElement("input");
+		champ14.setAttribute("type", "hidden");
+		champ14.setAttribute("name", 'niveau');
+		champ14.setAttribute("value", niveau);
+		FormulaireImprimerRPU.appendChild(champ14);
 		
 		$("#ImpressionRPU").trigger('click');
   	}

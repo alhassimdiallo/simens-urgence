@@ -2121,190 +2121,8 @@ class ConsultationController extends AbstractActionController {
 	
 	//Impression des rpu-traumatologie
 	//Impression des rpu-traumatologie
-	public function imprimerRpuTraumatologie()
+	public function imprimerRpuTraumatologieAction()
 	{
-		
-		
-		
-		/*
-		$control = new DateHelper();
-		
-		$user = $this->layout()->user;
-		$serviceMedecin = $user['NomService'];
-		$id_medecin = $user['id_employe'];
-		
-		$nomMedecin = $user['Nom'];
-		$prenomMedecin = $user['Prenom'];
-		$donneesMedecin = array('nomMedecin' => $nomMedecin, 'prenomMedecin' => $prenomMedecin);
-		
-		$id_patient = $this->params ()->fromPost ( 'id_patient', 0 );
-		$donneesPatient = $this->getConsultationTable()->getInfoPatient($id_patient);
-		
-		$id_admission = $this->params ()->fromPost ( 'id_admission', 0 );
-		$InfoAdmission = $this->getAdmissionTable()->getAdmissionUrgence($id_admission);
-		
-		$donnees = array();
-		//Récupération des données
-		$donnees['motif_consultation'] = $this->params ()->fromPost (  'motif_consultation' );
-		
-		$donnees['salle'] = $this->params ()->fromPost (  'salle' );
-		$donnees['lit'] = $this->params ()->fromPost (  'lit' );
-		$donnees['couloir'] = $this->params ()->fromPost (  'couloir' );
-		
-		$donnees['cote_dominant'] = str_replace("â€™", "'", $this->params ()->fromPost (  'cote_dominant' ));
-		$donnees['cote_dominant'] = str_replace("œ", "oe" ,$donnees['cote_dominant']);
-		
-		$donnees['date_heure'] = str_replace("â€™", "'", $this->params ()->fromPost (  'date_heure' ));
-		$donnees['date_heure'] = str_replace("œ", "oe" ,$donnees['date_heure']);
-		
-		$donnees['circonstances'] = str_replace("â€™", "'", $this->params ()->fromPost (  'circonstances' ));
-		$donnees['circonstances'] = str_replace("œ", "oe" ,$donnees['circonstances']);
-		
-		$donnees['antecedent'] = str_replace("â€™", "'", $this->params ()->fromPost (  'antecedent' ));
-		$donnees['antecedent'] = str_replace("œ", "oe" ,$donnees['antecedent']);
-		
-		$donnees['examen_physique'] = str_replace("â€™", "'", $this->params ()->fromPost (  'examen_physique' ));
-		$donnees['examen_physique'] = str_replace("œ", "oe" ,$donnees['examen_physique']);
-		
-		$donnees['examen_paraclinique'] = str_replace("â€™", "'", $this->params ()->fromPost (  'examen_paraclinique' ));
-		$donnees['examen_paraclinique'] = str_replace("œ", "oe" ,$donnees['examen_paraclinique']);
-		
-		$donnees['resultat_examen_complementaire'] = str_replace("â€™", "'", $this->params ()->fromPost (  'resultat_examen_complementaire' ));
-		$donnees['resultat_examen_complementaire'] = str_replace("œ", "oe" ,$donnees['resultat_examen_complementaire']);
-		
-		$donnees['mecanismes'] = str_replace("â€™", "'", $this->params ()->fromPost (  'mecanismes' ));
-		$donnees['mecanismes'] = str_replace("œ", "oe" ,$donnees['mecanismes']);
-		
-		$donnees['mecanismes_precision'] = str_replace("â€™", "'", $this->params ()->fromPost (  'mecanismes_precision' ));
-		$donnees['mecanismes_precision'] = str_replace("œ", "oe" ,$donnees['mecanismes_precision']);
-		
-		$donnees['indication'] = str_replace("â€™", "'", $this->params ()->fromPost (  'indication' ));
-		$donnees['indication'] = str_replace("œ", "oe" ,$donnees['indication']);
-		
-		$donnees['indication_precision'] = str_replace("â€™", "'", $this->params ()->fromPost (  'indication_precision' ));
-		$donnees['indication_precision'] = str_replace("œ", "oe" ,$donnees['indication_precision']);
-		
-		$donnees['diagnostic'] = str_replace("â€™", "'", $this->params ()->fromPost (  'diagnostic' ));
-		$donnees['diagnostic'] = str_replace("œ", "oe" ,$donnees['diagnostic']);
-		
-		$donnees['diagnostic_precision'] = str_replace("â€™", "'", $this->params ()->fromPost (  'diagnostic_precision' ));
-		$donnees['diagnostic_precision'] = str_replace("œ", "oe" ,$donnees['diagnostic_precision']);
-		
-		$donnees['conduite'] = str_replace("â€™", "'", $this->params ()->fromPost (  'conduite' ));
-		$donnees['conduite'] = str_replace("œ", "oe" ,$donnees['conduite']);
-		
-		$donnees['motif_sortie'] = str_replace("â€™", "'", $this->params ()->fromPost (  'motif_sortie' ));
-		$donnees['motif_sortie'] = str_replace("œ", "oe" ,$donnees['motif_sortie']);
-		
-		$donnees['rendez_vous'] = str_replace("â€™", "'", $this->params ()->fromPost (  'rendez_vous' ));
-		$donnees['rendez_vous'] = str_replace("œ", "oe" ,$donnees['rendez_vous']);
-		
-		$donnees['specialiste_trauma'] = str_replace("â€™", "'", $this->params ()->fromPost (  'specialiste_trauma' ));
-		$donnees['specialiste_trauma'] = str_replace("œ", "oe" ,$donnees['specialiste_trauma']);
-		
-		$donnees['conduite_specialiste'] = str_replace("â€™", "'", $this->params ()->fromPost (  'conduite_specialiste' ));
-		$donnees['conduite_specialiste'] = str_replace("œ", "oe" ,$donnees['conduite_specialiste']);
-		
-		//=====================================================================
-		//=====================================================================
-		$donnees['resume_syndromique'] = str_replace("â€™", "'", $this->params ()->fromPost (  'resume_syndromique' ));
-		$donnees['resume_syndromique'] = str_replace("œ", "oe" ,$donnees['resume_syndromique']);
-		
-		$donnees['hypotheses_diagnostiques'] = str_replace("â€™", "'", $this->params()->fromPost('hypotheses_diagnostiques'));
-		$donnees['hypotheses_diagnostiques'] = str_replace("œ", "oe" ,$donnees['hypotheses_diagnostiques']);
-		
-		$donnees['examens_complementaires'] = str_replace("â€™", "'", $this->params()->fromPost('examens_complementaires'));
-		$donnees['examens_complementaires'] = str_replace("œ", "oe" ,$donnees['examens_complementaires']);
-		
-		$donnees['traitement'] = str_replace("â€™", "'", $this->params()->fromPost('traitement'));
-		$donnees['traitement'] = str_replace("œ", "oe" ,$donnees['traitement']);
-		
-		$donnees['resultats_examens_complementaires'] = str_replace("â€™", "'", $this->params()->fromPost('resultats_examens_complementaires'));
-		$donnees['resultats_examens_complementaires'] = str_replace("œ", "oe" ,$donnees['resultats_examens_complementaires']);
-		
-		$donnees['mutation'] = str_replace("â€™", "'", $this->params()->fromPost('mutation'));
-		$donnees['mutation'] = str_replace("œ", "oe" ,$donnees['mutation']);
-		
-		$donnees['mise_a_jour_1'] = str_replace("â€™", "'", $this->params()->fromPost('mise_a_jour_1'));
-		$donnees['mise_a_jour_1'] = str_replace("œ", "oe" ,$donnees['mise_a_jour_1']);
-		
-		$donnees['mise_a_jour_2'] = str_replace("â€™", "'", $this->params()->fromPost('mise_a_jour_2'));
-		$donnees['mise_a_jour_2'] = str_replace("œ", "oe" ,$donnees['mise_a_jour_2']);
-		
-		$donnees['mise_a_jour_3'] = str_replace("â€™", "'", $this->params()->fromPost('mise_a_jour_3'));
-		$donnees['mise_a_jour_3'] = str_replace("œ", "oe" ,$donnees['mise_a_jour_3']);
-		
-		$donnees['avis_specialiste'] = str_replace("â€™", "'", $this->params()->fromPost('avis_specialiste'));
-		$donnees['avis_specialiste'] = str_replace("œ", "oe" ,$donnees['avis_specialiste']);
-		
-		//Recuperer les informations sur les infirmiers
-		//Recuperer les informations sur les infirmiers
-		$infosInfirmiers = array();
-		if($InfoAdmission){
-			$id_infirmier_tri = $InfoAdmission->id_infirmier_tri;
-			$id_infirmier_service = $InfoAdmission->id_infirmier_service;
-			if($id_infirmier_tri){
-				$infos =  $this->getConsultationTable()->getInfosInfirmier($id_infirmier_tri);
-				$infosInfirmiers[$id_infirmier_tri] = $infos['PRENOM'].' '.$infos['NOM'];
-			}
-			if($id_infirmier_service){
-				if($id_medecin != $id_infirmier_service){
-					$infos =  $this->getConsultationTable()->getInfosInfirmier($id_infirmier_service);
-					$infosInfirmiers[$id_infirmier_service] = $infos['PRENOM'].' '.$infos['NOM'];
-				}else{
-					$infosInfirmiers[$id_infirmier_service] = "";
-				}
-			}
-		}
-		
-		//Recuperation des informations sur la consultation
-		//Recuperation des informations sur la consultation
-		$constantes = $this->getConsultationTable()->getConsultationParIdAdmission($id_admission);
-		if($constantes){
-			$donnees['dateConsultation'] = $control->convertDate($constantes['DATEONLY']);
-		}else{
-			$today = new \DateTime ();
-			$date = $today->format( 'd/m/Y' );
-			$donnees['dateConsultation'] = $date;
-		}
-		
-		$listeSalles = $this->getPatientTable()->listeSalles();
-		$listeLits = $this->getPatientTable()->listeLits();
-		$listeServiceMutation = $this->getPatientTable ()->listeServicesMutation();
-		$listeCirconstances = $this->getPatientTable ()->listeCirconstances();
-		$listeMecanismes = $this->getPatientTable ()->listeMecanismes();
-		$listeIndications = $this->getPatientTable ()->listeIndications();
-		$listeDiagnostics = $this->getPatientTable ()->listeDiagnostic();
-		$listeModeSortie = $this->getPatientTable ()->listeMotifsSortieRpuTraumato();
-		
-		//CREATION DU DOCUMENT PDF
-		//Créer le document
-		$DocPdf = new DocumentPdf();
-		
-		//Créer la page 1
-		$page1 = new RpuTraumatologiePdf();
-		
-		$page1->setService($serviceMedecin);
-		$page1->setInfoAdmission($InfoAdmission);
-		
-		//Envoi des données du patient
-		$page1->setDonneesPatientTC($donneesPatient);
-		//Envoi des données du medecin
-		$page1->setDonneesMedecinTC($donneesMedecin);
-		//Envoi des données des infirmiers
-		$page1->setDonneesInfosInfirmiers($infosInfirmiers);
-		//Envoi de la liste des salles et des lits et service de mutation
-		$page1->setListeSalles($listeSalles);
-		$page1->setListeLits($listeLits);
-		$page1->setListeServiceMutation($listeServiceMutation);
-		$page1->setListeCirconstances($listeCirconstances);
-		$page1->setListeMecanismes($listeMecanismes);
-		$page1->setListeIndications($listeIndications);
-		$page1->setListeDiagnostics($listeDiagnostics);
-		$page1->setListeModeSortie($listeModeSortie);
-		*/
-		
-
 		$control = new DateHelper();
 		
 		$user = $this->layout()->user;
@@ -2324,7 +2142,13 @@ class ConsultationController extends AbstractActionController {
 		$listeSalles = $this->getPatientTable()->listeSalles();
 		$listeLits = $this->getPatientTable()->listeLits();
 		$listeServiceMutation = $this->getPatientTable ()->listeServicesMutation();
+		$listeCirconstances = $this->getPatientTable ()->listeCirconstances();
+		$listeMecanismes = $this->getPatientTable ()->listeMecanismes();
+		$listeIndications = $this->getPatientTable ()->listeIndications();
+		$listeDiagnostics = $this->getPatientTable ()->listeDiagnostic();
+		$listeModeSortie = $this->getPatientTable ()->listeMotifsSortieRpuTraumato();
 		
+
 		$infosComp = array();
 		$infosComp['salle'] = $this->params ()->fromPost (  'salle' );
 		$infosComp['lit'] = $this->params ()->fromPost (  'lit' );
@@ -2335,54 +2159,99 @@ class ConsultationController extends AbstractActionController {
 		//Récupération des données
 		$tabInformations = array();
 		
-		$tabInformations[0]['titre'] = 'Motif de la consultation';
-		$tabInformations[0]['type' ] = 1;
-		$tabInformations[0]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'motif_consultation' ));
-		
-		$tabInformations[1]['titre'] = 'Résumé syndrômique';
-		$tabInformations[1]['type' ] = 1;
-		$tabInformations[1]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'resume_syndromique' ));
-		
-		$tabInformations[2]['titre'] = 'Hypothèses diagnostiques';
-		$tabInformations[2]['type' ] = 1;
-		$tabInformations[2]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'hypotheses_diagnostiques' ));
-		
-		$tabInformations[3]['titre'] = 'Examens complémentaires';
-		$tabInformations[3]['type' ] = 1;
-		$tabInformations[3]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'examens_complementaires' ));
-		
-		$tabInformations[4]['titre'] = 'Traitement';
-		$tabInformations[4]['type' ] = 1;
-		$tabInformations[4]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'traitement' ));
-		
-		$tabInformations[5]['titre'] = 'Résultats des examens complémentaires';
-		$tabInformations[5]['type' ] = 1;
-		$tabInformations[5]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'resultats_examens_complementaires' ));
-		
-		$tabInformations[6]['titre'] = 'Mutation';
-		$tabInformations[6]['type' ] = 2;
-		$mutation = $this->params ()->fromPost (  'mutation' );
-		if($mutation){
-			$tabInformations[6]['texte'] = iconv ('UTF-8' , 'windows-1252', $listeServiceMutation[$mutation]);
+		$tabInformations[0]['titre'] = 'Côté dominant';
+		$tabInformations[0]['type' ] = 2;
+		$cote_dominant = $this->params ()->fromPost (  'cote_dominant' );
+		if($cote_dominant){
+			if($cote_dominant == 1){	$tabInformations[0]['texte'] = 'Droite';}
+			else{ 	$tabInformations[0]['texte'] = 'Gauche'; }
 		}else{
-			$tabInformations[6]['texte'] = null;
+			$tabInformations[0]['texte'] = null;
 		}
 		
-		$tabInformations[7]['titre'] = 'Mise à jour 1';
+		$tabInformations[1]['titre'] = 'Date & heure';
+		$tabInformations[1]['type' ] = 2;
+		$tabInformations[1]['texte'] = $this->params ()->fromPost (  'date_heure' );
+		
+		$tabInformations[2]['titre'] = 'Circonstances';
+		$tabInformations[2]['type' ] = 2;
+		$circonstances = $this->params ()->fromPost (  'circonstances' );
+		if($circonstances){
+			$tabInformations[2]['texte'] = iconv ('UTF-8' , 'windows-1252', $listeCirconstances[$circonstances]);
+		}else{
+			$tabInformations[2]['texte'] = null;
+		}
+		
+		
+		$tabInformations[3]['titre'] = 'Antécédent';
+		$tabInformations[3]['type' ] = 1;
+		$tabInformations[3]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'antecedent' ));
+		
+		$tabInformations[4]['titre'] = 'Examen physique';
+		$tabInformations[4]['type' ] = 1;
+		$tabInformations[4]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'examen_physique' ));
+		
+		$tabInformations[5]['titre'] = 'Examen paraclinique';
+		$tabInformations[5]['type' ] = 1;
+		$tabInformations[5]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'examen_paraclinique' ));
+		
+		$tabInformations[6]['titre'] = 'Résultat des examens complémentaires';
+		$tabInformations[6]['type' ] = 1;
+		$tabInformations[6]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'resultat_examen_complementaire' ));
+		
+		$tabInformations[7]['titre'] = 'Mécanismes';
 		$tabInformations[7]['type' ] = 2;
-		$tabInformations[7]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'mise_a_jour_1' ));
+		$mecanismes = $this->params ()->fromPost (  'mecanismes' );
+		if($mecanismes){ $tabInformations[7]['texte'] = iconv ('UTF-8' , 'windows-1252', $listeMecanismes[$mecanismes]); }
+		else{ $tabInformations[7]['texte'] = null; }
 		
-		$tabInformations[8]['titre'] = 'Mise à jour 2';
+		$tabInformations[8]['titre'] = 'Mécanismes précision';
 		$tabInformations[8]['type' ] = 2;
-		$tabInformations[8]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'mise_a_jour_2' ));
+		$tabInformations[8]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'mecanismes_precision' ));
 		
-		$tabInformations[9]['titre'] = 'Mise à jour 3';
+		$tabInformations[9]['titre'] = 'Indication';
 		$tabInformations[9]['type' ] = 2;
-		$tabInformations[9]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'mise_a_jour_3' ));
+		$indication = $this->params ()->fromPost (  'indication' );
+		if($indication){ $tabInformations[9]['texte'] = iconv ('UTF-8' , 'windows-1252', $listeIndications[$indication]); }
+		else{ $tabInformations[9]['texte'] = null; }
 		
-		$tabInformations[10]['titre'] = 'Avis du spécialiste';
-		$tabInformations[10]['type' ] = 1;
-		$tabInformations[10]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'avis_specialiste' ));
+		$tabInformations[10]['titre'] = 'Indication précision';
+		$tabInformations[10]['type' ] = 2;
+		$tabInformations[10]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'indication_precision' ));
+		
+		$tabInformations[11]['titre'] = 'Diagnostic';
+		$tabInformations[11]['type' ] = 2;
+		$diagnostic = $this->params ()->fromPost (  'diagnostic' );
+		if($diagnostic){ $tabInformations[11]['texte'] = iconv ('UTF-8' , 'windows-1252', $listeDiagnostics[$diagnostic]); }
+		else{ $tabInformations[11]['texte'] = null; }
+		
+		$tabInformations[12]['titre'] = 'Diagnostic précision';
+		$tabInformations[12]['type' ] = 2;
+		$tabInformations[12]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'diagnostic_precision' ));
+		
+		$tabInformations[13]['titre'] = 'Conduite à tenir';
+		$tabInformations[13]['type' ] = 1;
+		$tabInformations[13]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'conduite' ));
+		
+		$tabInformations[14]['titre'] = 'Mode de sortie';
+		$tabInformations[14]['type' ] = 2;
+		$motif_sortie = $this->params ()->fromPost (  'motif_sortie' );
+		if($diagnostic){ $tabInformations[14]['texte'] = iconv ('UTF-8' , 'windows-1252', $listeModeSortie[$motif_sortie]); }
+		else{ $tabInformations[14]['texte'] = null; }
+		
+		
+		$tabInformations[15]['titre'] = 'Rendez-vous';
+		$tabInformations[15]['type' ] = 2;
+		$tabInformations[15]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'rendez_vous' ));
+		
+		$tabInformations[16]['titre'] = 'Avis du spécialiste';
+		$tabInformations[16]['type' ] = 1;
+		$tabInformations[16]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'specialiste_trauma' ));
+		
+		$tabInformations[17]['titre'] = 'Conduite à tenir (par le spécialiste)';
+		$tabInformations[17]['type' ] = 1;
+		$tabInformations[17]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'conduite_specialiste' ));
+		
 		
 		//Recuperer les informations sur les infirmiers
 		//Recuperer les informations sur les infirmiers
@@ -2432,9 +2301,136 @@ class ConsultationController extends AbstractActionController {
 		
 		$pdf->ImpressionRpuTraumatologie();
 		$pdf->Output('I');
+	}
+	
+	public function imprimerRpuSortieAction(){
+
+		$control = new DateHelper();
+		
+		$user = $this->layout()->user;
+		$nomService = $user['NomService'];
+		$id_medecin = $user['id_employe'];
+		
+		$nomMedecin = $user['Nom'];
+		$prenomMedecin = $user['Prenom'];
+		$infosMedecin = array('nomMedecin' => $nomMedecin, 'prenomMedecin' => $prenomMedecin);
+		
+		$id_patient = $this->params ()->fromPost ( 'id_patient', 0 );
+		$infosPatients = $this->getConsultationTable()->getInfoPatient($id_patient);
+		
+		$id_admission = $this->params ()->fromPost ( 'id_admission', 0 );
+		$infosAdmission = $this->getAdmissionTable()->getAdmissionUrgence($id_admission);
+		
+		$listeSalles = $this->getPatientTable()->listeSalles();
+		$listeLits = $this->getPatientTable()->listeLits();
+		$listeServiceMutation = $this->getPatientTable ()->listeServicesMutation();
+		$listeCirconstances = $this->getPatientTable ()->listeCirconstances();
+		$listeMecanismes = $this->getPatientTable ()->listeMecanismes();
+		$listeIndications = $this->getPatientTable ()->listeIndications();
+		$listeDiagnostics = $this->getPatientTable ()->listeDiagnostic();
+		$listeModeSortie = $this->getPatientTable ()->listeMotifsSortieRpuSortie();
 		
 		
+		$infosComp = array();
+		$infosComp['salle'] = $this->params ()->fromPost (  'salle' );
+		$infosComp['lit'] = $this->params ()->fromPost (  'lit' );
+		$infosComp['couloir'] = $this->params ()->fromPost (  'couloir' );
+		$infosComp['niveau'] = $this->params ()->fromPost (  'niveau' );
 		
+		//Récupération des données
+		//Récupération des données
+		$tabInformations = array();
+		
+		$tabInformations[0]['titre'] = 'Diagnostic principal';
+		$tabInformations[0]['type' ] = 1;
+		$tabInformations[0]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'diganostic' ));
+		
+		$tabInformations[1]['titre'] = 'Diagnostic associé';
+		$tabInformations[1]['type' ] = 1;
+		$tabInformations[1]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'diganostic_associe' ));
+		
+		$tabInformations[2]['titre'] = 'Traitement';
+		$tabInformations[2]['type' ] = 1;
+		$tabInformations[2]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'traitement' ));
+		
+		$tabInformations[3]['titre'] = 'Examens complémentaires demandés';
+		$tabInformations[3]['type' ] = 1;
+		$tabInformations[3]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'examens_complementaires_demandes' ));
+		
+		$tabInformations[4]['titre'] = 'Mode de sortie';
+		$tabInformations[4]['type' ] = 2;
+		$mode_sortie = $this->params ()->fromPost (  'mode_sortie' );
+		if($mode_sortie){
+			$tabInformations[4]['texte'] = iconv ('UTF-8' , 'windows-1252', $listeModeSortie[$mode_sortie]);
+		}else{
+			$tabInformations[4]['texte'] = null;
+		}
+		
+		$tabInformations[5]['titre'] = 'Muter vers';
+		$tabInformations[5]['type' ] = 2;
+		$liste_mutation = $this->params ()->fromPost (  'liste_mutation' );
+		if($liste_mutation){
+			$tabInformations[5]['texte'] = iconv ('UTF-8' , 'windows-1252', $listeServiceMutation[$liste_mutation]);
+		}else{
+			$tabInformations[5]['texte'] = null;
+		}
+		
+		$tabInformations[6]['titre'] = 'Transférer vers';
+		$tabInformations[6]['type' ] = 2;
+		$tabInformations[6]['texte'] = iconv ('UTF-8' , 'windows-1252',  $this->params ()->fromPost (  'transfert' ));
+		
+		$tabInformations[7]['titre'] = 'Evacuer vers';
+		$tabInformations[7]['type' ] = 2;
+		$tabInformations[7]['texte'] = iconv ('UTF-8' , 'windows-1252',  $this->params ()->fromPost (  'evacuation' ));
+
+		//Recuperer les informations sur les infirmiers
+		//Recuperer les informations sur les infirmiers
+		$infosInfirmiers = array();
+		if($infosAdmission){
+			$id_infirmier_tri = $infosAdmission->id_infirmier_tri;
+			$id_infirmier_service = $infosAdmission->id_infirmier_service;
+			if($id_infirmier_tri){
+				$infos =  $this->getConsultationTable()->getInfosInfirmier($id_infirmier_tri);
+				$infosInfirmiers[$id_infirmier_tri] = iconv ('UTF-8' , 'windows-1252', $infos['PRENOM']).' '.iconv ('UTF-8' , 'windows-1252',$infos['NOM']);
+			}
+		
+			if($id_infirmier_service){
+				if($id_medecin != $id_infirmier_service){
+					$infos =  $this->getConsultationTable()->getInfosInfirmier($id_infirmier_service);
+					$infosInfirmiers[$id_infirmier_service] = iconv ('UTF-8' , 'windows-1252', $infos['PRENOM']).' '.iconv ('UTF-8' , 'windows-1252', $infos['NOM']);
+				}else{
+					$infosInfirmiers[$id_infirmier_service] = "";
+				}
+			}
+		}
+		
+		//Recuperation des informations sur la consultation
+		//Recuperation des informations sur la consultation
+		$constantes = $this->getConsultationTable()->getConsultationParIdAdmission($id_admission);
+		if($constantes){
+			$infosComp['dateConsultation'] = $control->convertDate($constantes['DATEONLY']);
+		}else{
+			$today = new \DateTime ();
+			$date = $today->format( 'd/m/Y' );
+			$infosComp['dateConsultation'] = $date;
+		}
+		
+		$pdf = new PDF();
+		$pdf->SetMargins(13.5,13.5,13.5);
+		
+		$pdf->setNbInformations(count($tabInformations));
+		$pdf->setTabInformations($tabInformations);
+		$pdf->setNomService($nomService);
+		$pdf->setInfosMedecin($infosMedecin);
+		$pdf->setInfosInfirmiers($infosInfirmiers);
+		$pdf->setInfosPatients($infosPatients);
+		$pdf->setInfosAdmission($infosAdmission);
+		$pdf->setInfosComp($infosComp);
+		$pdf->setListeLits($listeLits);
+		$pdf->setListeSalles($listeSalles);
+		
+		$pdf->ImpressionRpuSortie();
+		$pdf->Output('I');
 	}
 	
 	

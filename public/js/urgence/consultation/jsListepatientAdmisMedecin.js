@@ -701,14 +701,18 @@
 		if(id == 4){
 			$('#respond .rpu_sortie_input_choix span').toggle(false);
 			$('#element4').toggle(true);
+			$('#rpu_sortie_transfert, #rpu_sortie_evacuation').val('');
 		}else if(id == 5){
 			$('#respond .rpu_sortie_input_choix span').toggle(false);
 			$('#element5').toggle(true);
+			$('#rpu_sortie_liste_mutation, #rpu_sortie_evacuation').val('');
 		}else if(id == 6){
 			$('#respond .rpu_sortie_input_choix span').toggle(false);
 			$('#element6').toggle(true);
+			$('#rpu_sortie_liste_mutation, #rpu_sortie_transfert').val('');
 		}else{
 			$('#respond .rpu_sortie_input_choix span').toggle(false);
+			$('#rpu_sortie_liste_mutation, #rpu_sortie_transfert, #rpu_sortie_evacuation').val('');
 		}
 
 	}
@@ -1572,7 +1576,7 @@
   	
   	//IMPRESSION DU Rpu-traumatologie
   	//IMPRESSION DU Rpu-traumatologie
-  	function imprimerRpuTraumatologie(){alert();
+  	function imprimerRpuTraumatologie(){
   		var id_patient = $('#id_patient').val();
     	var id_admission = $('#id_admission').val();
     	
@@ -1615,8 +1619,8 @@
     	var conduite_specialiste           = $('#rpu_traumatisme_conduite_specialiste').val();
     	
     	
-    	var vart =  tabUrl[0]+'public/consultation/impression-rpu-traumatologie';
-    	//var vart =  tabUrl[0]+'public/consultation/imprimer-rpu-traumatologie';
+    	//var vart =  tabUrl[0]+'public/consultation/impression-rpu-traumatologie';
+    	var vart =  tabUrl[0]+'public/consultation/imprimer-rpu-traumatologie';
 		var FormulaireImprimerRPU = document.getElementById("FormulaireImprimerRPU");
 		FormulaireImprimerRPU.setAttribute("action", vart);
 		FormulaireImprimerRPU.setAttribute("method", "POST");
@@ -1800,6 +1804,7 @@
     	var salle = $('#salle').val();
     	var lit = $('#lit').val();
     	var couloir = $('#couloir').val();
+    	var niveau =  $('#niveauAlerte :radio:checked').val();
     	
     	var diganostic                        = $('#rpu_sortie_diagnostic_principal').val();
     	var diganostic_associe                = $('#rpu_sortie_diagnostic_associe').val();
@@ -1811,7 +1816,8 @@
     	var evacuation                        = $('#rpu_sortie_evacuation').val();
     	
     	
-    	var vart =  tabUrl[0]+'public/consultation/impression-rpu-sortie';
+    	//var vart =  tabUrl[0]+'public/consultation/impression-rpu-sortie';
+    	var vart =  tabUrl[0]+'public/consultation/imprimer-rpu-sortie';
 		var FormulaireImprimerRPU = document.getElementById("FormulaireImprimerRPU");
 		FormulaireImprimerRPU.setAttribute("action", vart);
 		FormulaireImprimerRPU.setAttribute("method", "POST");
@@ -1900,6 +1906,12 @@
 		champ13.setAttribute("name", 'evacuation');
 		champ13.setAttribute("value", evacuation);
 		FormulaireImprimerRPU.appendChild(champ13);
+		
+		var champ14 = document.createElement("input");
+		champ14.setAttribute("type", "hidden");
+		champ14.setAttribute("name", 'niveau');
+		champ14.setAttribute("value", niveau);
+		FormulaireImprimerRPU.appendChild(champ14);
 		
 		$("#ImpressionRPU").trigger('click');
   	}

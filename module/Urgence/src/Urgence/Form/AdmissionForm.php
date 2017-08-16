@@ -721,7 +721,7 @@ class AdmissionForm extends Form{
 				'attributes' => array (
 						'id' => 'rpu_traumatisme_mecanismes_precision',
 						'style' => 'width:96%;',
-						'maxlength' => 60,
+						//'maxlength' => 60,
 				)
 		) );
 		
@@ -747,7 +747,7 @@ class AdmissionForm extends Form{
 				'attributes' => array(
 						'id' => 'rpu_traumatisme_diagnostic_precision',
 						'style' => 'width:96%;',
-						'maxlength' => 60,
+						//'maxlength' => 60,
 				),
 		));
 		
@@ -866,7 +866,7 @@ class AdmissionForm extends Form{
 				'attributes' => array(
 						'id' => 'rpu_traumatisme_indication_precision',
 						'style' => 'width:96%;',
-						'maxlength' => 60,
+						//'maxlength' => 60,
 				),
 		));
 		
@@ -970,7 +970,7 @@ class AdmissionForm extends Form{
 				'name' => 'rpu_sortie_examens_complementaires_demandes',
 				'type' => 'Textarea',
 				'options' => array (
-						'label' => iconv('ISO-8859-1', 'UTF-8','Examens complementaires demandées')
+						'label' => iconv('ISO-8859-1', 'UTF-8','Examens complementaires demandés')
 				),
 				'attributes' => array(
 						'id' => 'rpu_sortie_examens_complementaires_demandes',

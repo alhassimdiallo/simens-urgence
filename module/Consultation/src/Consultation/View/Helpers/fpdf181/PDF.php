@@ -108,9 +108,6 @@ class PDF extends fpdf
 		$this->SetStyle('U',false);
 		$this->SetTextColor(0);
 	}
-
-
-	
 	
 	
 	
@@ -231,16 +228,13 @@ class PDF extends fpdf
 	}
 	
 	
-	
-	
-	
 	function EnTetePage()
 	{
 		$this->SetFont('Times','',10.3);
 		$this->SetTextColor(0,0,0);
 		$this->Cell(0,4,"République du Sénégal");
 		$this->SetFont('Times','',8.5);
-		$this->Cell(0,4,"Saint-Louis, le 11/08/2017",0,0,'R');
+		$this->Cell(0,4,"Saint-Louis, le ".$this->getInfosComp()['dateConsultation'],0,0,'R');
 		$this->SetFont('Times','',10.3);
 		$this->Ln(5.4);
 		$this->Cell(100,4,"Ministère de la santé et de l'action sociale");
@@ -426,9 +420,17 @@ class PDF extends fpdf
 	{
 		$this->AddPage();
 		$this->EnTetePage();
-		//$this->CorpsDocument();
+		$this->CorpsDocument();
 	}
 
+	//IMPRESSION DES RPU SORTIE
+	//IMPRESSION DES RPU SORTIE
+	function ImpressionRpuSortie()
+	{
+		$this->AddPage();
+		$this->EnTetePage();
+		$this->CorpsDocument();
+	}
 
 }
 
