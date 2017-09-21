@@ -699,6 +699,24 @@ class ConsultationTable {
 		return $resultat;
 	}
 	
+	public function getInfosEmploye($id_personne){
+		$adapter = $this->tableGateway->getAdapter ();
+		$sql = new Sql ( $adapter );
+		$select = $sql->select ();
+		$select->columns( array( '*' ));
+		$select->from( array('e1' => 'employe'));
+		$select->join( array('p1' => 'personne'), 'e1.id_personne = p1.ID_PERSONNE' , array('*'));
+	
+		$where = new Where();
+		$where->equalTo('e1.id_personne', $id_personne);
+		$select->where($where);
+	
+		$stat = $sql->prepareStatementForSqlObject ( $select );
+		$result = $stat->execute ();
+	
+		return $result->current();
+	}
+	
 	public function getInfosInfirmier($id_personne) {
 		$adapter = $this->tableGateway->getAdapter ();
 		$sql = new Sql ( $adapter );

@@ -444,6 +444,12 @@ class ConsultationController extends AbstractActionController {
 		
 		
 		if($historique == 1){
+			if($role == 'medecin'){
+				$html .="<script> if(rpu_hospitalisation == 0){ $('.rpu_hospitalisation_donnees_onglet').toggle(false); } </script>";
+				$html .="<script> if(rpu_traumatisme == 0){ $('.rpu_traumatisme_donnees_onglet').toggle(false); }  </script>";
+				$html .="<script> if(rpu_sortie == 0){ $('.rpu_sortie_donnees_onglet').toggle(false); }  </script>";
+			}
+			
 			$heure = "";
 			if($constantes){ $heure = " - ".$constantes['HEURECONS'];}
 			$html .="<script> $('#infoDateConsultation').html(' {<span style=\'font-weight: normal;\'> date de consultation :</span> ".(new DateHelper())->convertDate($admission->date).$heure." }'); </script>";
@@ -2068,6 +2074,15 @@ class ConsultationController extends AbstractActionController {
 		$tabInformations[10]['type' ] = 1;
 		$tabInformations[10]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'avis_specialiste' ));
 		
+		//Recuperer les infos du medecin si c'est le specialiste qui est connecte
+		//Recuperer les infos du medecin si c'est le specialiste qui est connecte
+		if($user['role'] == 'specialiste'){
+			$constantes = $this->getConsultationTable()->getConsultationParIdAdmission($id_admission);
+			$id_medecin = $constantes['ID_MEDECIN'];
+			$infosEmploye = $this->getConsultationTable()->getInfosEmploye($id_medecin);
+			$infosMedecin = array('nomMedecin' => $infosEmploye['NOM'], 'prenomMedecin' => $infosEmploye['PRENOM']);
+		}
+		
 		//Recuperer les informations sur les infirmiers
 		//Recuperer les informations sur les infirmiers
 		$infosInfirmiers = array();
@@ -2252,6 +2267,14 @@ class ConsultationController extends AbstractActionController {
 		$tabInformations[17]['type' ] = 1;
 		$tabInformations[17]['texte'] = iconv ('UTF-8' , 'windows-1252', $this->params ()->fromPost (  'conduite_specialiste' ));
 		
+		//Recuperer les infos du medecin si c'est le specialiste qui est connecte
+		//Recuperer les infos du medecin si c'est le specialiste qui est connecte
+		if($user['role'] == 'specialiste'){
+			$constantes = $this->getConsultationTable()->getConsultationParIdAdmission($id_admission);
+			$id_medecin = $constantes['ID_MEDECIN'];
+			$infosEmploye = $this->getConsultationTable()->getInfosEmploye($id_medecin);
+			$infosMedecin = array('nomMedecin' => $infosEmploye['NOM'], 'prenomMedecin' => $infosEmploye['PRENOM']);
+		}
 		
 		//Recuperer les informations sur les infirmiers
 		//Recuperer les informations sur les infirmiers
@@ -2383,6 +2406,15 @@ class ConsultationController extends AbstractActionController {
 		$tabInformations[7]['type' ] = 2;
 		$tabInformations[7]['texte'] = iconv ('UTF-8' , 'windows-1252',  $this->params ()->fromPost (  'evacuation' ));
 
+		//Recuperer les infos du medecin si c'est le specialiste qui est connecte 
+		//Recuperer les infos du medecin si c'est le specialiste qui est connecte
+		if($user['role'] == 'specialiste'){
+			$constantes = $this->getConsultationTable()->getConsultationParIdAdmission($id_admission);
+			$id_medecin = $constantes['ID_MEDECIN'];
+			$infosEmploye = $this->getConsultationTable()->getInfosEmploye($id_medecin);
+			$infosMedecin = array('nomMedecin' => $infosEmploye['NOM'], 'prenomMedecin' => $infosEmploye['PRENOM']);
+		}
+		
 		//Recuperer les informations sur les infirmiers
 		//Recuperer les informations sur les infirmiers
 		$infosInfirmiers = array();

@@ -255,6 +255,8 @@ function clickRowHandler() {
 		var id = aData[6];
 		visualiser(id);
 	});
+	
+	$('a,img,hass').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: "slideDown", delay: 250 }} );
 
 }
 

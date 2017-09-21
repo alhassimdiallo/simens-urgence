@@ -213,6 +213,8 @@
     		var id = aData[7];
     		visualiser(id);
     	});
+    	
+    	$('a,img,hass').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: "slideDown", delay: 250 }} );
     }
 
     function admission(id_patient, id_admission){

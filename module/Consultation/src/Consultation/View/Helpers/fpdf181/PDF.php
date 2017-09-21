@@ -321,9 +321,12 @@ class PDF extends fpdf
 		
 		
 		$this->Ln(5.4);
+		$this->SetFont('Times','I',10);
+		$this->Cell(52,5,"n°: ".$this->getInfosPatients()['NUMERO_DOSSIER'],0,0,'L');
+		
 		$this->SetFont('Times','',12.3);
 		$this->SetTextColor(0,128,0);
-		$this->Cell(0,5,"RESUME DU PASSAGE AUX URGENCES",0,0,'C');
+		$this->Cell(131,5,"RESUME DU PASSAGE AUX URGENCES",0,0,'L');
 		$this->Ln(5.5);
 		$this->SetFillColor(0,128,0);
 		$this->Cell(0,0.3,"",0,1,'C',true);
