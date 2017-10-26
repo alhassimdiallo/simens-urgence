@@ -16,7 +16,10 @@
  $this->headScript()->appendFile($this->basePath().'/js/matrix.js');
 
  echo $this->headTitle($this->pageTitle);?> 
-        <?php echo $this->headLink()->appendStylesheet($this->basePath().'/css/smoothness/jquery-ui.css');?>
+        <?php 
+             echo $this->headLink()->appendStylesheet($this->basePath().'/css/smoothness/jquery-ui.css');
+             echo $this->headLink()->appendStylesheet($this->basePath().'/js/plugins/multiselect/css/multi-select.css');
+        ?>
 
         <?php $this->headScript()->appendFile($this->basePath().'/js/jquery-1.9.1.js');
 		      $this->headScript()->appendFile($this->basePath().'/js/jquery-ui.js');
@@ -25,6 +28,11 @@
 		      
 		      $this->headScript()->appendFile($this->basePath().'/js/jquery.maskedinput.js');
 		      $this->headScript()->appendFile($this->basePath().'/js/controle_saisie/controle_saisie.js');
+
+		      $this->headScript()->appendFile($this->basePath().'/js/plugins/multiselect/js/jquery.multi-select.js');
+		      $this->headScript()->appendFile($this->basePath().'/js/plugins/multiselect/js/jquery.quicksearch.js');
+		      
+		      
 		?>
 
 		<?php echo $this->headScript();?>

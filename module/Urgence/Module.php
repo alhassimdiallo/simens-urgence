@@ -22,6 +22,10 @@ use Urgence\Model\ConsultationTable;
 use Urgence\Model\Consultation;
 use Urgence\Model\MotifAdmissionTable;
 use Urgence\Model\MotifAdmission;
+use Urgence\Model\PathologieTable;
+use Urgence\Model\Pathologie;
+use Urgence\Model\TypePathologieTable;
+use Urgence\Model\TypePathologie;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ViewHelperProviderInterface {
 
@@ -139,6 +143,29 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 							$resultSetPrototype->setArrayObjectPrototype(new Service());
 							return new TableGateway('service', $dbAdapter, null, $resultSetPrototype);
 						},
+						'Urgence\Model\PathologieTable' => function ($sm) {
+							$tableGateway = $sm->get('PathologieTableFactGateway');
+							$table = new PathologieTable($tableGateway);
+							return $table;
+						},
+						'PathologieTableFactGateway' => function($sm) {
+							$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+							$resultSetPrototype = new ResultSet();
+							$resultSetPrototype->setArrayObjectPrototype(new Pathologie());
+							return new TableGateway('pathologie', $dbAdapter, null, $resultSetPrototype);
+						},
+						'Urgence\Model\TypePathologieTable' => function ($sm) {
+							$tableGateway = $sm->get('TypePathologieTableGateway');
+							$table = new TypePathologieTable($tableGateway);
+							return $table;
+						},
+						'TypePathologieTableGateway' => function($sm) {
+							$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+							$resultSetPrototype = new ResultSet();
+							$resultSetPrototype->setArrayObjectPrototype(new TypePathologie());
+							return new TableGateway('type_pathologie', $dbAdapter, null, $resultSetPrototype);
+						},
+						
 
 				)
 		);

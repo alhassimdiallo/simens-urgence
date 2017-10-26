@@ -514,3 +514,24 @@ function getModeEntre(id){
 	  			$(".divModeTransport label").css({'margin-left':'15px'});
 		     }
 }
+
+
+function getAutoCompletionListeMotifsAdmission(){ 
+		$.ajax({
+			type : 'POST',
+			url : tabUrl[0] + 'public/urgence/liste-pathologies',
+			data : null,
+			success : function(data) {
+				var result = jQuery.parseJSON(data); 
+				
+				var script ="<script>" +
+						    "$( '.form-author input' ).autocomplete({"+
+				            "source: arrayPathologies,"+
+				            "});" +
+				            "</script>";
+				result += script;
+				
+				setTimeout(function(){ $('#scriptAutoCompletion').html(result); },1000);
+			}
+		});
+	}

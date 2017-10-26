@@ -162,6 +162,11 @@ return array(
     								'get-nb-patient-admis-non-vu' => array('infirmier-service','medecin'),
     								'liste-lits' => array('infirmier-service','medecin'),
     								
+    								'liste-pathologies' => array('infirmier-service','infirmier-tri','medecin'),
+    								'liste-pathologies-select-option' => array('infirmier-service','medecin'),
+    								'liste-motifs-admission' => array('infirmier-service','medecin'),
+    								'liste-motifs-admission-multi-select' => array('infirmier-service','medecin'),
+    								'modification-liste-motifs-admission-select' => array('infirmier-service','medecin'),
     						),
     						
     						

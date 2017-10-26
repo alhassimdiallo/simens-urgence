@@ -944,3 +944,256 @@ function getModeEntre(id){
   			$(".divModeTransport label").css({'margin-left':'15px'});
 	     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getAutoCompletionListeMotifsAdmission(){ 
+	
+	$.ajax({
+		type : 'POST',
+		url : tabUrl[0] + 'public/urgence/liste-pathologies',
+		data : null,
+		success : function(data) {
+			var result = jQuery.parseJSON(data); 
+			
+			var script ="<script>" +
+					    "$( '.form-author input' ).autocomplete({"+
+			            "source: arrayPathologies,"+
+			            "});" +
+			            "</script>";
+			result += script;
+			
+			setTimeout(function(){ $('#scriptAutoCompletion').html(result); },1000);
+		}
+	});
+
+	getlisteMotifsAdmissionMultiSelectPlugin2(); 
+	getListePathologiesPopupCorrection();
+}
+
+function getListePathologiesPopupCorrection(){ 
+	
+	$.ajax({
+		type : 'POST',
+		url : tabUrl[0] + 'public/urgence/liste-pathologies-select-option',
+		data : null,
+		success : function(data) {
+			var result = jQuery.parseJSON(data); 
+			$('.listeMotifsAdmissionAutoCompletion .listeSelectAC').html(result); 
+		}
+	});
+
+}
+
+function autoConfigScript(){
+	$('#gestionInfosACorriger select, .listeMotifsAdmissionAutoCompletion select').change(function(){
+		var tabMotisAdmissionSelect = $('#gestionInfosACorriger select').val();
+		var valeurDeCorrection = $('.listeMotifsAdmissionAutoCompletion select').val();
+		if(tabMotisAdmissionSelect && valeurDeCorrection){ $('.multiSelLineSubmit').toggle(true);}
+		else{ $('.multiSelLineSubmit').toggle(false); }
+	});
+	
+	$('#gestionInfosACorriger select, .listeMotifsAdmissionAutoCompletion select').trigger('change');
+}
+
+function appelScriptAuto(val){
+	var tabMotisAdmissionSelect = $('#gestionInfosACorriger select').val();
+	var valeurDeCorrection = $('.listeMotifsAdmissionAutoCompletion select').val();
+	if(tabMotisAdmissionSelect && valeurDeCorrection){ $('.multiSelLineSubmit').toggle(true);}
+	else{ $('.multiSelLineSubmit').toggle(false); }
+}
+
+function getListeMotifsAdmissionMultiSelectPlugin(){
+	$('.listeMotifsAdmissionMultiSelect').multiSelect({
+		  selectableHeader: "<label>Motifs &agrave; corriger</label><input type='text' style='font-size: 12px; height: 30px; padding-left: 5px;' class='search-input searchInputMultiSelectMotifs' autocomplete='off' placeholder='Rechercher un motif'>",
+		  selectionHeader: "<label>Motifs s&eacute;lectionn&eacute;s</label><input type='text' style='font-size: 12px; height: 30px; padding-left: 5px;' class='search-input searchInputMultiSelectMotifs' autocomplete='off' placeholder='Rechercher un motif'>",
+		  afterInit: function(ms){
+		    var that = this,
+		        $selectableSearch = that.$selectableUl.prev(),
+		        $selectionSearch = that.$selectionUl.prev(),
+		        selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+		        selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+		    that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+		    .on('keydown', function(e){
+		      if (e.which === 40){
+		        that.$selectableUl.focus();
+		        return false;
+		      }
+		    });
+
+		    that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+		    .on('keydown', function(e){
+		      if (e.which == 40){
+		        that.$selectionUl.focus();
+		        return false;
+		      }
+		    });
+		  },
+		  afterSelect: function(){
+		    this.qs1.cache();
+		    this.qs2.cache();
+		  },
+		  afterDeselect: function(){
+		    this.qs1.cache();
+		    this.qs2.cache();
+		  }
+		
+	});
+	
+	autoConfigScript();
+	
+}
+
+function getlisteMotifsAdmissionMultiSelectPlugin2(){ 
+	
+	$.ajax({
+		type : 'POST',
+		url : tabUrl[0] + 'public/urgence/liste-motifs-admission-multi-select',
+		data : null,
+		success : function(data) {
+			var result = jQuery.parseJSON(data);
+			setTimeout(function(){ 
+				$('#gestionInfosACorriger').html(result);
+				getListeMotifsAdmissionMultiSelectPlugin();
+			});
+		}
+	});
+
+}
+
+function confirmerModificationMotifsAdmission(){
+
+	$( "#confirmerModificationMotifsAdmission" ).dialog({
+		resizable: false,
+	    height:530,
+	    width:450,
+	    autoOpen: false,
+	    modal: true,
+	    buttons: {
+	    	"Annuler": function() {
+	    		$( this ).dialog( "close" );
+		    },
+	        "Confirmer": function() {
+              
+	        	$( this ).dialog( "close" );
+	        	$('.multiSelLineSubmit').toggle(false);
+	        	$('.multiSelLineChargement').toggle(true);
+              
+	        	var tabMotisSelectionnes = $('#gestionInfosACorriger select').val();
+	        	var valeurDeCorrection = $('.listeMotifsAdmissionAutoCompletion select').val();
+              
+	        	$('.ms-container .ms-selectable input, .ms-container .ms-selection input').attr('disabled', true);
+	        	$('.listeMotifsAdmissionAutoCompletion select').attr('disabled', true);
+	        	$('.ms-container .ms-list').unbind('click').css({'background-color':'#eee'});
+              
+	        	$.ajax({
+	        		type : 'POST',
+	        		url : tabUrl[0] + 'public/urgence/modification-liste-motifs-admission-select',
+	        		data : {'tabMotisSelectionnes':tabMotisSelectionnes, 'valeurDeCorrection':valeurDeCorrection.split(',')[0] },
+	        		success : function(data) {
+	        			
+	        			getlisteMotifsAdmissionMultiSelectPlugin2();
+	        			setTimeout(function(){ $('.listeMotifsAdmissionAutoCompletion select').attr('disabled', false).val(''); },1500);
+	        			$('.multiSelLineChargement').toggle(false);
+	        			$('.multiSelLineEffectuer').toggle(true);
+	        			setTimeout(function(){ $('.multiSelLineEffectuer').fadeOut(); },5000);
+	        			
+	        		}
+              
+	        	});
+              
+	        
+	        }
+	   
+	    }
+	  
+	});
+	
+	$("#confirmerModificationMotifsAdmission").dialog('open');
+  
+}
+
+function modifierMotifsAdmission(){
+	$( ".multiSelLineChargement, .multiSelLineEffectuer").toggle(false);
+	$( "#modifierMotifsAdmission" ).dialog({
+		resizable: false,
+	    height:630,
+	    width:750,
+	    autoOpen: false,
+	    modal: true,
+	    buttons: {
+	        "Fermer": function() {
+              $( this ).dialog( "close" );
+	        }
+	   
+	    }
+	  
+	});
+  
+}
+  
+function corrigerMotifsAdmission(){
+	
+	modifierMotifsAdmission();
+	$("#modifierMotifsAdmission").dialog('open');
+	
+}
+
+function correctionMotifsAdmission(){
+	
+	var tabMotisAdmissionSelect = $('#gestionInfosACorriger select').val();
+	var valeurDeCorrection = $('.listeMotifsAdmissionAutoCompletion select').val();
+	if(tabMotisAdmissionSelect && valeurDeCorrection){
+		var tabMotifs = "";
+		for(var i=0 ; i<tabMotisAdmissionSelect.length ; i++){
+			if(i%2 == 0){
+				tabMotifs +="<tr class='ligneColorGray'><td class='col1Confirm'>"+(i+1)+"</td><td class='col2Confirm'>"+tabMotisAdmissionSelect[i]+"</td></tr>";
+			}else{
+				tabMotifs +="<tr class='ligneColorWhite'><td class='col1Confirm'>"+(i+1)+"</td><td class='col2Confirm'>"+tabMotisAdmissionSelect[i]+"</td></tr>";
+			}
+		}
+		
+		$('.infosConfirmation').html(tabMotifs);
+		$('.affichageMessageInfosRemplace div').html(valeurDeCorrection.split(',')[1]);
+		confirmerModificationMotifsAdmission();
+	}
+	
+}
+
+
+

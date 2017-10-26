@@ -11,4 +11,9 @@ class MotifAdmission{
 		$this->id_admission_urgence = (! empty ( $data ['id_admission_urgence'] )) ? $data ['id_admission_urgence'] : null;
 		$this->libelle_motif = (! empty ( $data ['libelle_motif'] )) ? $data ['libelle_motif'] : null;
 	}
+	
+	public function getArrayCopy()
+	{
+		return get_object_vars($this);
+	}
 }

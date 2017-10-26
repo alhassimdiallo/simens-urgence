@@ -166,8 +166,14 @@ $(window).load(function () {
 			<div id='motif_admission_donnees'> 
                 
                 <?php echo  $this->headScript()->appendFile($this->basePath().'/js/urgence/ajouterMotifs.js');?>
-                <div style='width: 100%; height: 30px;'>
-						<div style='width: 70%; float: left; '>
+                
+					<table style='width: 100%; height: 230px;'>
+                   <tr style='width: 100%; height: 230px; vertical-align: top;'>
+                      <td style='width: 70%; height: 230px;'>
+                        <div style='float: right; margin-right: 40px;'> 
+                           <a href='javascript:corrigerMotifsAdmission();'><img style='cursor: pointer;' src='<?php echo $this->basePath().'/img/light/wizard.png'?>' /></a>
+                        </div>
+						<div style='width: 100%; float: left; '>
 							<table id="responde" style='width: 100%;'>
 								<tr class="form-author" id="motif1">
 									<th><?php echo $this->formRow($form->get('motif_admission1'));?> <span
@@ -214,7 +220,7 @@ $(window).load(function () {
 
 							<!--********************* BOUTON AJOUTER-SUPPRIMER ************************-->
 							<!--********************* BOUTON AJOUTER-SUPPRIMER ************************-->
-							<div id="controls_motifs" style="margin-top: 10px; width: 70%;">
+							<div id="controls_motifs" style="margin-top: 10px; width: 80%;">
 								<div style="width: 100%;">
 									<div style="width: 4.5%; height: 1px; float: left;"
 										id="supprimer_donnee">
@@ -248,21 +254,25 @@ $(window).load(function () {
 								</tr>
 							</table>
 
-							<script>
-                            cacherToutMotif();
-							supprimerUnMotif();
+						<script>
+                        cacherToutMotif();
+						supprimerUnMotif();
                        </script>
-
-						</div>
-
-						<div style='width: 27%; float: left;'>
-							<p style='color: white; opacity: 0.5;'>
+                       
+					   </div>
+					
+                      </td>
+                      <td style='width: 30%; height: 230px;'>
+                        <div style='width: 95%; float: left;'>
+							<p style='color: white; opacity: 0.6;'>
 								<img id="faces"
 									src='<?php echo $this->basePath().'/images_icons/donnees_examens_physiques.jpg'?>'
 									alt="consult-motif" style='margin-right: 5px; height: 315px;' />
 							</p>
 						</div>
-					</div>
+                      </td>
+                   </tr>
+                </table>
 
 				</div>
 
@@ -462,7 +472,61 @@ $(window).load(function () {
 </div -->
 
 
+<div id="modifierMotifsAdmission" title="Corriger les motifs d'admission" style="display: none;" >
+
+   <div id="gestionInfosACorriger" class="gestionInfosACorriger" >
+   </div>
+   
+   <div id="gestCorrectionInfos" align="center">
+     <div id="contenuCorrectionInfos" align="center">
+       <div class="multiSelLine"> <img src="<?php echo $this->basePath().'/img/light/arrow_down_left.png';?>" > </div>
+       <div class="multiSelLine multiSelLineTitre"> Remplacer par </div>
+       <div class="multiSelLine multiSelLineListeMotifs listeMotifsAdmissionAutoCompletion"> <div class="listeSelectAC"></div> <div class="nouveauPathAC"> <a href="javascript:ajouterPathologies();"> <img src="<?php echo $this->basePath().'/img/light/plus.png';?>"  title="Ajouter une pathologie" ></a> </div> </div>
+       <div class="multiSelLine multiSelLineSubmit"> <button onclick="correctionMotifsAdmission();"> Corriger </button> </div>
+       <div class="multiSelLine multiSelLineChargement"> <div>Correction en cours</div> <img src="<?php echo $this->basePath().'/images/loading/Chargement_6.gif';?>" > </div>
+       <div class="multiSelLine multiSelLineEffectuer"> <div>Correction effectu&eacute;e avec succ&egrave;s <img src="<?php echo $this->basePath().'/images_icons/tick_16.png';?>" ></div>  </div>
+     </div>
+   </div>
+
+   
+   <div id="scriptAutoCompletionCorrection"></div>
+</div>
+
+<div id="scriptAutoCompletion"></div>
+
+<div id="confirmerModificationMotifsAdmission" title="Confirmer la correction des motifs" style="display: none;" >
+   <div class="affichageMessageInfos" align="center"> <div> REMPLACER LE(S) MOTIF(S) SUIVANT(S) </div>  </div>
+   <table class="infosConfirmation"> </table>
+   <div class="affichageMessageInfos" align="center"> <div> PAR </div>  </div>
+   <div class="affichageMessageInfosRemplace" align="center"> <div>  </div>  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="ajouterPathologies" title="Ajouter des pathologies" style="display: none;" >
+
+</div>
+
+
+
+
+
+
 <script type="text/javascript">
+getAutoCompletionListeMotifsAdmission();
+
 $('#admission_urgence, .chargementPageModification').toggle(false);
 $('#accordionsUrgence').accordion();
 
@@ -515,5 +579,5 @@ var tabUrl = base_url.split("public");
 $('#plus_admission').toggle(true);
 $("#admission").replaceWith("<li id='admission' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/moin-green2.png' alt='Liste' /> Urgence </span></a></li>");
 dep_admission1();
-$('#liste_admission_style').css({'font-weight':'bold','color':'white','font-size':'22px'});
+$('#liste_admission_style').css({'font-weight':'bold','color':'white','font-size':'19px'});
 </script>

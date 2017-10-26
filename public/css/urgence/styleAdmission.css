@@ -876,3 +876,153 @@ z-index: 1;
 .liste_patient tr:hover{
 	background: #e4e4e4;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#gestCorrectionInfos{
+	width: 100%;
+	height: 20px;
+	margin-top: 10px;
+}
+
+#contenuCorrectionInfos{
+	width: 90%;
+	height: 20px;
+	margin-top: 15px;
+}
+
+.multiSelLine{
+	width: 90%;
+	height: 35px;
+}
+
+.multiSelLineTitre{
+	color: gray;
+	font-family: times new roman;
+}
+
+.multiSelLineListeMotifs select{
+	width: 75%;
+	height: 35px;
+	padding-left: 5px;
+}
+
+.multiSelLineListeMotifs .listeSelectAC{
+	width: 80%;
+}
+
+.multiSelLineListeMotifs .nouveauPathAC{
+	width: 10%;
+	float: right;
+	margin-top: -40px;
+}
+
+.multiSelLineListeMotifs .nouveauPathAC img{
+	margin-left: -120px;
+	cursor: pointer;
+}
+
+.multiSelLineSubmit{
+	margin-top: 10px;
+}
+
+.multiSelLineSubmit button{
+	border: 1px;
+	border-radius: 15px;
+	width: 18%;
+	height: 32px;
+}
+
+.multiSelLineChargement img{
+	height: 30px;
+	width: 30px;
+}
+
+.multiSelLineChargement div{
+	color: gray;
+	font-family: times new roman;
+	margin-bottom: 7px;
+	margin-top: 7px;
+}
+
+.multiSelLineEffectuer div{
+	color: green;
+	font-family: times new roman;
+	margin-bottom: 7px;
+	margin-top: 10px;
+}
+
+.multiSelLineMessage{
+	color: red;
+	font-family: times new roman;
+	margin-bottom: 7px;
+}
+
+.infosConfirmation{
+	width: 100%; 
+	height: 10px; 
+}
+
+.infosConfirmation tr{
+	width: 100%; 
+	height: 10px;
+	font-size: 15px;
+}
+
+.infosConfirmation .col1Confirm{
+	width: 5%; 
+	height: 25px; 
+	font-style: italic;
+	color: gray;
+}
+
+.infosConfirmation .col2Confirm{
+	width: 95%; 
+	height: 25px; 
+	padding-left: 6px;
+}
+
+.infosConfirmation .ligneColorGray{
+	background: #f1f1f1;
+}
+
+.affichageMessageMultiSelectInfos{
+	width: 100%;
+}
+
+.affichageMessageInfos div{
+	color: gray;
+	margin-top: 13px;
+	margin-bottom: 13px;
+	font-size: 13px;
+}
+
+.affichageMessageInfosRemplace div{
+	color: green;
+	font-weight: bold;
+	margin-top: 2px;
+	margin-bottom: 10px;
+	font-size: 15px;
+}

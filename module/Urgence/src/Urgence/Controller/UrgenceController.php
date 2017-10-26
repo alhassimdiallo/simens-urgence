@@ -18,6 +18,8 @@ class UrgenceController extends AbstractActionController {
 	protected $admissionTable;
 	protected $dateHelper;
 	protected $motifAdmissionTable;
+	protected $pathologieTable;
+	protected $typePathologieTable;
 	
 	public function getPatientTable() {
 		if (! $this->patientTable) {
@@ -67,6 +69,21 @@ class UrgenceController extends AbstractActionController {
 		return $this->motifAdmissionTable;
 	}
 	
+	public function getPathologieTable() {
+		if (! $this->pathologieTable) {
+			$sm = $this->getServiceLocator ();
+			$this->pathologieTable = $sm->get ( 'Urgence\Model\PathologieTable' );
+		}
+		return $this->pathologieTable;
+	}
+	
+	public function getTypePathologieTable() {
+		if (! $this->typePathologieTable) {
+			$sm = $this->getServiceLocator ();
+			$this->typePathologieTable = $sm->get ( 'Urgence\Model\TypePathologieTable' );
+		}
+		return $this->typePathologieTable;
+	}
 	
 	public function baseUrl() {
 		$baseUrl = $_SERVER ['REQUEST_URI'];
@@ -469,13 +486,14 @@ class UrgenceController extends AbstractActionController {
 // 			}
 // 		}
 // 		var_dump($listeLitsParSalles); exit();
+//		var_dump($this->getPatientTable()->getListeLitsPourSalle(2)->current()); exit();
 
 		//Fin --- A REVOIR DANS LA PARTI AMELIORATION
 		//Fin --- A REVOIR DANS LA PARTI AMELIORATION
-		
-		
-		//var_dump($this->getPatientTable()->getListeLitsPourSalle(2)->current()); exit();
-		
+
+		//$liste = $this->getPathologieTable()->getListePathologie();
+		//$listeMotifsAdmission = $this->getMotifAdmissionTable()->getListeMotifsAdmissionUrgence();
+		//var_dump($listeMotifsAdmission); exit();
 		
 		if ($this->getRequest ()->isPost ()) {
 				
@@ -1368,9 +1386,76 @@ class UrgenceController extends AbstractActionController {
 		) ) );
 	}
 	
+	public function listePathologiesAction()
+	{
+		$script  = "<script>";
+		$script .="var arrayPathologies = new Array();";
+		$listePathologies = $this->getPathologieTable()->getListePathologie();
+		for($i = 0 ; $i <  count($listePathologies); $i++){
+			$script .="arrayPathologies[".$i."] = '".str_replace("'", "\'", $listePathologies[$i]['libelle_pathologie'])."';";
+		}
+		$script .="</script>";
+	
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( $script ));
+	}
+	
+	public function listePathologiesSelectOptionAction()
+	{
+		$html  = "<select onchange='appelScriptAuto();' ><option value=''> *** Choisir une pathologie *** </option>";
+		$listePathologies = $this->getPathologieTable()->getListePathologie();
+		for($i = 0 ; $i <  count($listePathologies); $i++){
+			$html .='<option value="'.$listePathologies[$i]['id'].",".$listePathologies[$i]['libelle_pathologie'].'" >'.$listePathologies[$i]['libelle_pathologie'].'</option>';
+		}
+		$html .="</select>";
+	
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( $html ));
+	}
 	
 	
 	
+	public function listeMotifsAdmissionAction()
+	{
+		$script  = "<script>";
+		$script .="var arrayMotifAdmission = new Array();";
+		$listeMotifsAdmission = $this->getMotifAdmissionTable()->getListeMotifsAdmissionUrgence();
+		for($i = 0 ; $i <  count($listeMotifsAdmission); $i++){
+			$script .="arrayMotifAdmission[".$i."] = '".str_replace("'", "\'", $listeMotifsAdmission[$i]['libelle_motif'])."';";
+		}
+		$script .="</script>";
+		
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( $script ));
+	}
+	
+	
+	public function listeMotifsAdmissionMultiSelectAction()
+	{
+		$html  = "<select id='listeMotifsAdmission' class='listeMotifsAdmissionMultiSelect' multiple='multiple'>";
+		$listeMotifsAdmission = $this->getMotifAdmissionTable()->getListeMotifsAdmissionUrgence();
+		for($i = 0 ; $i <  count($listeMotifsAdmission); $i++){
+			$html .="<option>".$listeMotifsAdmission[$i]['libelle_motif']."</option>";
+		}
+		$html .="</select>";
+	
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( $html ));
+	}
+	
+	
+	public function modificationListeMotifsAdmissionSelectAction()
+	{
+		$tabMotisSelectionnes = $this->params ()->fromPost ( 'tabMotisSelectionnes', 0 );
+		$valeurDeCorrection = $this->params ()->fromPost ( 'valeurDeCorrection', 0 );
+
+		$laPathologie = $this->getPathologieTable()->getLaPathologie($valeurDeCorrection);
+		
+		$this->getMotifAdmissionTable()->modificationListeMotifsAdmissionUrgence($tabMotisSelectionnes, $laPathologie);
+	
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ());
+	}
 	
 	
 	
