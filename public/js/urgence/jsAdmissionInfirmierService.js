@@ -1005,6 +1005,7 @@ function getAutoCompletionListeMotifsAdmission(){
 	getListePathologiesPopupCorrection();
 	recupererListeTypesPathologies();
 	recupererListeDesPathologies();
+	getInfosStatistiquesParDefaut();
 }
 
 function getListePathologiesPopupCorrection(){ 
@@ -1489,3 +1490,76 @@ function enregistrementPathologie(tabTypePathologie, tabPathologie){
 		}
 	});
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function afficherInfosStatistiques(){
+	
+	$( "#affichageInfosStatistiques" ).dialog({
+		resizable: false,
+	    height:680,
+	    width:750,
+	    autoOpen: false,
+	    modal: true,
+	    buttons: {
+	        "Fermer": function() {
+              $( this ).dialog( "close" );
+	        }
+	    }
+	});
+  
+	$("#affichageInfosStatistiques").dialog('open');
+	
+	
+}
+
+
+function getInfosStatistiquesParDefaut(){
+	$.ajax({
+		type : 'POST',
+		url : tabUrl[0] + 'public/urgence/infos-statistiques-par-defaut',
+		data : null,
+		success : function(data) {
+			var result = jQuery.parseJSON(data);
+			$('#affichageInfosStatistiques .zoneResultatsInfosStatiques').html(result);
+		}
+	});
+}
+
+

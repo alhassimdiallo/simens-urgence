@@ -244,7 +244,7 @@ $(window).load(function () {
                       <td style='width: 70%; height: 230px;'>
                         <div style='float: right; margin-right: 40px;'> 
                            <?php if($role != 'infirmier-tri'){ ?>
-                               <img style='cursor: pointer;' src='<?php echo $this->basePath().'/img/light/information.png'?>' />
+                               <img onclick="afficherInfosStatistiques();" style='cursor: pointer;' src='<?php echo $this->basePath().'/img/light/information.png'?>' />
                                <a href='javascript:corrigerMotifsAdmission();'><img style='cursor: pointer;' src='<?php echo $this->basePath().'/img/light/wizard.png'?>' /></a>
                            <?php } ?>
 
@@ -680,12 +680,11 @@ $(window).load(function () {
 <!-- GESTION DE L'INTERFACE D'AFFICHAGE DES RESULTATS STATISTIQUES -->
 
 
-<div id="affichageDonneesStatistiques" title="Afficher d'informations statistiques" style="display: none;" >
+<div id="affichageInfosStatistiques" title="Afficher des informations statistiques" style="display: none;" >
 
-
-
-
-
+<div class="optionsTypeEtPathologie"></div>
+<div class="optionsPeriode"></div>
+<div class="zoneResultatsInfosStatiques"></div>
 
 </div>
 

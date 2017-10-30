@@ -172,6 +172,7 @@ return array(
     								'liste-types-pathologies-select' => array('infirmier-service','medecin'),
     								'enregistrement-type-pathologie' => array('infirmier-service','medecin'),
     								'enregistrement-pathologie' => array('infirmier-service','medecin'),
+    								'infos-statistiques-par-defaut' => array('infirmier-service','medecin'),
     						),
     						
     						
