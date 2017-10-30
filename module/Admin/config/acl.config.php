@@ -167,6 +167,11 @@ return array(
     								'liste-motifs-admission' => array('infirmier-service','medecin'),
     								'liste-motifs-admission-multi-select' => array('infirmier-service','medecin'),
     								'modification-liste-motifs-admission-select' => array('infirmier-service','medecin'),
+    								'liste-types-pathologies' => array('infirmier-service','medecin'),
+    								'liste-pathologies-pour-interface-ajout' => array('infirmier-service','medecin'),
+    								'liste-types-pathologies-select' => array('infirmier-service','medecin'),
+    								'enregistrement-type-pathologie' => array('infirmier-service','medecin'),
+    								'enregistrement-pathologie' => array('infirmier-service','medecin'),
     						),
     						
     						

@@ -8,6 +8,7 @@ use Urgence\Form\PatientForm;
 use Urgence\Form\AdmissionForm;
 use Urgence\View\Helper\DateHelper;
 use Zend\Json\Json;
+use Zend\Validator\InArray;
 
 class UrgenceController extends AbstractActionController {
 	protected $patientTable;
@@ -491,9 +492,94 @@ class UrgenceController extends AbstractActionController {
 		//Fin --- A REVOIR DANS LA PARTI AMELIORATION
 		//Fin --- A REVOIR DANS LA PARTI AMELIORATION
 
-		//$liste = $this->getPathologieTable()->getListePathologie();
-		//$listeMotifsAdmission = $this->getMotifAdmissionTable()->getListeMotifsAdmissionUrgence();
-		//var_dump($listeMotifsAdmission); exit();
+		$listeDesMotifsAdmission = $this->getMotifAdmissionTable()->getListeDesMotifsAdmissionUrgence();
+		
+		//var_dump($listeDesMotifsAdmission); exit();
+		
+		$touteTypePathologie = array();
+		$diffTypePathologie = array();
+		$diffLibelleTypePathologie = array();
+		
+		$toutePathologie = array();
+		$diffPathologie = array();
+		$diffPathologieVerifType = array();
+
+		for($i=0 ; $i < count($listeDesMotifsAdmission) ; $i++){
+			$typePathologie = $listeDesMotifsAdmission[$i]['type_pathologie'];
+			$libelleTypePathologie = $listeDesMotifsAdmission[$i]['libelle_type_pathologie'];
+			
+			$touteTypePathologie[] = $typePathologie;
+			if(!in_array($typePathologie, $diffTypePathologie)){
+				$diffTypePathologie[] = $typePathologie;
+				$diffLibelleTypePathologie[] = $libelleTypePathologie;			}
+			
+			$pathologie = $listeDesMotifsAdmission[$i]['libelle_motif'];
+			$toutePathologie[] = $pathologie;
+			if(!in_array($pathologie, $diffPathologie)){
+				$diffPathologie[] = $pathologie;
+				$diffPathologieVerifType[] = array($pathologie, $typePathologie);
+			}
+		}
+		
+		//var_dump($diffLibelleTypePathologie); exit();
+		
+		//var_dump(array_count_values($toutePathologie)); exit();
+		//var_dump($diffPathologieVerifType); exit();
+		//var_dump($verifTypePathologie); exit();
+		
+		
+		//var_dump(array_count_values($touteTypePathologie)); exit();
+		//var_dump($diffTypePathologie); exit();
+		
+		//var_dump($listeDesMotifsAdmission); exit();
+		
+		
+		$touteTypePathologieNbVal = array_count_values($touteTypePathologie);
+		$toutePathologieNbVal = array_count_values($toutePathologie);
+		
+		$html ='<table style="width: 100%;"> 
+				  <tr style="width: 100%; ">
+				    <td rowspan="2" style="width: 35%; height: 40px;">Types de pathologie</td>
+                    <td style="width: 50%; height: 40px; background: yellow;">Pathologies</td>
+                    <td style="width: 15%; height: 40px; background: green;">Total</td> 
+                  </tr>
+				</table>
+				';
+		
+		for($i=0 ; $i<count($diffTypePathologie) ; $i++){
+			
+			$prem = 1;
+			$html .="<table style='width: 100%; '>";
+			
+			for($j=0 ; $j<count($diffPathologieVerifType) ; $j++){
+				if($diffTypePathologie[$i] == $diffPathologieVerifType[$j][1]){
+					
+					if($prem == 1){
+
+						$html .='<tr style="width: 100%; ">
+						           <td rowspan="'.count($diffPathologieVerifType).'" style="width: 35%; height: 40px; background: red; text-align: center;">'.$diffLibelleTypePathologie[$i].' </br>(Total = '.$touteTypePathologieNbVal[$diffTypePathologie[$i]].')</td>
+						           <td style="width: 50%; height: 40px; background: yellow;">'.$diffPathologieVerifType[$j][0].'</td>
+						           <td style="width: 15%; height: 40px; background: green;">'.$toutePathologieNbVal[$diffPathologieVerifType[$j][0]].'</td>
+						         </tr>';
+						$prem++;
+					}else{
+						$html .='<tr style="width: 100%; ">
+                                   <td style="width: 50%; height: 40px; background: orange;">'.$diffPathologieVerifType[$j][0].'</td>
+                                   <td style="width: 15%; height: 40px; background: brown;">'.$toutePathologieNbVal[$diffPathologieVerifType[$j][0]].'</td> 
+                                 </tr>';
+					}
+					
+				}
+			}
+			
+			$html .="</table>";
+		}
+		
+		
+		
+		echo $html; exit(); 
+		
+		
 		
 		if ($this->getRequest ()->isPost ()) {
 				
@@ -1457,14 +1543,84 @@ class UrgenceController extends AbstractActionController {
 		return $this->getResponse ()->setContent(Json::encode ());
 	}
 	
+	public function listeTypesPathologiesAction()
+	{
+		$html  = "";
+		$listeTypesPathologies = $this->getTypePathologieTable()->getListeTypePathologieOrdreDecroissant();
+		for($i = 0 ; $i <  count($listeTypesPathologies); $i++){
+			if($i == 0){
+				$html .="<tr><td class='LTPE1  iconeIndicateurChoix_".$listeTypesPathologies[$i]['id']."'><a href='javascript:afficherListePathologieDuType(".$listeTypesPathologies[$i]['id'].");'><img src='../images_icons/greenarrowright.png'></a></td> <td class='LTPE2'>".str_replace("'", "'", $listeTypesPathologies[$i]['libelle_type_pathologie'])."</td></tr>";
+			}else{
+				$html .="<tr><td class='LTPE1  iconeIndicateurChoix_".$listeTypesPathologies[$i]['id']."'><a href='javascript:afficherListePathologieDuType(".$listeTypesPathologies[$i]['id'].");'><img src='../img/light/triangle_right.png'></a></td> <td class='LTPE2'>".str_replace("'", "'", $listeTypesPathologies[$i]['libelle_type_pathologie'])."</td></tr>";
+			}
+
+		}
+		
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( $html ));
+	}
+	
+	/**
+	 * Liste des pathologies pour un type donné
+	 */
+	public function listePathologiesPourInterfaceAjoutAction()
+	{
+		$idTypePathologie = ( int ) $this->params ()->fromPost ( 'id', 0 );
+		
+		if($idTypePathologie == 0){
+			$lastTypePathologie = $this->getTypePathologieTable()->getListeTypePathologieOrdreDecroissant();
+			$idTypePathologie = $lastTypePathologie[0]['id'];
+		}
+		
+		$listePathologies = $this->getPathologieTable()->getListePathologieOrdreDecroissant($idTypePathologie);
+
+		$html  = "";
+		for($i = 0 ; $i <  count($listePathologies); $i++){
+			$html .="<tr><!-- td class='LPE1  iconeIndPathologieChoix_".$listePathologies[$i]['id']."'> </td--> <td class='LPE2'>".str_replace("'", "'", $listePathologies[$i]['libelle_pathologie'])."</td></tr>";
+		}
+	
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( $html ));
+	}
 	
 	
+	public function listeTypesPathologiesSelectAction()
+	{
+		$html  = "";
+		$listeTypesPathologies = $this->getTypePathologieTable()->getListeTypePathologieOrdreDecroissant();
+		for($i = 0 ; $i <  count($listeTypesPathologies); $i++){
+			$html .="<option  value='".$listeTypesPathologies[$i]['id']."'>".str_replace("'", "'", $listeTypesPathologies[$i]['libelle_type_pathologie'])."</option>";
+		}
+		
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( $html ));
+	}
 	
 	
+	public function enregistrementTypePathologieAction()
+	{
+		$user = $this->layout()->user;
+		$id_employe = $user['id_personne'];
+		$tabTypePathologie = $this->params ()->fromPost ( 'tabTypePathologie' );
+
+		$this->getTypePathologieTable()->insertTypePathologie($tabTypePathologie, $id_employe);
 	
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( ));
+	}
 	
+	public function enregistrementPathologieAction()
+	{
+		$user = $this->layout()->user;
+		$id_employe = $user['id_personne'];
+		$tabTypePathologie = $this->params ()->fromPost ( 'tabTypePathologie' );
+		$tabPathologie = $this->params ()->fromPost ( 'tabPathologie' );
+
+		$this->getPathologieTable()->insertPathologie($tabTypePathologie, $tabPathologie, $id_employe);
 	
-	
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( 1 ));
+	}
 	
 	
 	

@@ -951,6 +951,7 @@ z-index: 1;
 .multiSelLineSubmit button{
 	border: 1px;
 	border-radius: 15px;
+	border: 1px solid #bdb9b9;
 	width: 18%;
 	height: 32px;
 }
@@ -1025,4 +1026,244 @@ z-index: 1;
 	margin-top: 2px;
 	margin-bottom: 10px;
 	font-size: 15px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#ajouterPathologies table, #ajouterPathologies table tr{
+	width: 100%;
+	vertical-align: top;
+}
+
+
+
+
+#ajouterPathologies .lignePathologiesExistantes td{
+	width: 50%; 
+	margin-left: 5px;
+}
+
+#ajouterPathologies .lignePathologiesExistantes td label{
+	width: 100%;
+	height: 25px;
+	font-size: 20px;
+	font-family: times new roman;
+	text-align: left;
+}
+#ajouterPathologies .lignePathologiesExistantes td div{
+	width: 96%;
+	height: 200px;
+	font-size: 17px;
+	font-family: times new roman;
+	border: 1px solid #cccccc;
+    background : #fdfdfd;
+    box-shadow: 0pt 0pt 5px rgba(0, 0, 0, 0.3);
+	margin-bottom: 5px;
+	overflow-y: auto;
+}
+
+#ajouterPathologies .listeTypePathologiesExistantes table tr{
+	width: 100%;
+	font-size: 17px;
+}
+
+#ajouterPathologies .listeTypePathologiesExistantes table td{
+	padding-left: 6px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border: 1px solid #cccccc;
+}
+
+#ajouterPathologies .listeTypePathologiesExistantes table .LTPE1{
+	width: 8%;
+}
+
+#ajouterPathologies .listeTypePathologiesExistantes table .LTPE2{
+	width: 92%;
+}
+
+#ajouterPathologies .listeTypePathologiesExistantes table tr:hover{
+	background: #e1e1e1; 
+}
+
+.listeTypePathologiesExistantes table img{
+	margin-left: -3px;
+	cursor: pointer;
+}
+
+
+#ajouterPathologies .listePathologiesExistantes table tr{
+	width: 100%;
+	font-size: 17px;
+	cursor: pointer;
+}
+
+#ajouterPathologies .listePathologiesExistantes table td{
+	padding-left: 6px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border: 1px solid #cccccc;
+}
+
+#ajouterPathologies .listePathologiesExistantes table .LPE1{
+	width: 0%;
+}
+
+#ajouterPathologies .listePathologiesExistantes table .LPE2{
+	width: 100%;
+}
+
+#ajouterPathologies .listePathologiesExistantes table tr:hover{
+	background: #e1e1e1; 
+}
+
+
+
+
+
+
+
+
+
+
+
+#ajouterPathologies .ligneBoutonsAjout td{
+	width: 50%; 
+	height: 50px;
+	margin-left: 5px;
+}
+
+#ajouterPathologies .ligneBoutonsAjout button{
+	border: 1px;
+	border-radius: 15px;
+	border: 1px solid #bdb9b9;
+	height: 32px;
+	font-size: 14px;
+	margin-top: 5px;
+}
+
+.ligneBoutonsAjout .boutonATP button{
+	width: 70%;
+}
+
+.ligneBoutonsAjout .boutonAP button{
+	width: 55%;
+}
+
+#ajouterPathologies .ligneBoutonsAnnulerValiderAjout, #ajouterPathologies .ligneBoutonsAnnulerValiderAjout tr{
+	width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+#ajouterPathologies .ligneInfosAjoutPathologies, #ajouterPathologies .ligneInfosAjoutPathologies tr{
+	width: 100%;
+}
+
+#ajouterPathologies .ligneInfosAjoutPathologies td{
+	height: 35px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-align: left;
+	margin-left: 15px;
+}
+
+#ajouterPathologies .ligneInfosAjoutPathologies .LIATP, #ajouterPathologies .ligneInfosAjoutPathologies .LIAP{
+	width: 50%;
+}
+
+#ajouterPathologies .LIATP img, #ajouterPathologies .LIAP img{
+	margin-top: -15px;
+}
+
+
+
+
+
+
+.interfaceAjoutPathologies .contenuIAPath table, .interfaceAjoutPathologies .contenuIAPath table tr{
+	width: 100%;
+}
+
+.interfaceAjoutPathologies .contenuIAPath td{
+	width: 100%; 
+	margin-left: 5px;
+}
+
+.interfaceAjoutPathologies .contenuIAPath{
+	height: 220px;
+	overflow-y: auto;
+}
+
+.interfaceAjoutPathologies .contenuIAPath td input[type='text']{
+	width: 50%; 
+	height: 40px;
+	padding-left: 8px;
+	font-size: 18px;
+	font-family: times new roman;
+	border: 2px solid #bdb9b9;
+}
+
+.contenuIAPath img{
+	cursor: pointer;
+}
+
+.contenuIAPath .champsAjoutP select{
+	width: 50%;
+	height: 40px;
+	padding-left: 8px;
+	font-size: 18px;
+	font-family: times new roman;
+	border: 2px solid #bdb9b9;
+	float: left;
+}
+
+.contenuIAPath .champsAjoutP input[type='text']{
+	max-width: 48%;
+	height: 40px;
+	padding-left: 8px;
+	font-size: 18px;
+	font-family: times new roman;
+	border: 2px solid #bdb9b9;
+	float: left;
+	margin-left: 4px;
+}
+
+
+
+#ajouterPathologies .ligneBoutonsAnnulerValiderAjout td{
+	width: 50%;
+	height: 50px;
+}
+
+#ajouterPathologies .ligneBoutonsAnnulerValiderAjout button{
+	border: 1px;
+	border-radius: 15px;
+	border: 1px solid #bdb9b9;
+	height: 32px;
+	font-size: 14px;
+	margin-top: 5px;
+}
+
+#ajouterPathologies .ligneBoutonsAnnulerValiderAjout .boutonAVAA{
+	float: right; 
 }

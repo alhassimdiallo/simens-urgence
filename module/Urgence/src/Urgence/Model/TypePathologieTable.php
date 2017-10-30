@@ -3,6 +3,7 @@
 namespace Urgence\Model;
 
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Select;
 
 class TypePathologieTable {
 	protected $tableGateway;
@@ -10,18 +11,21 @@ class TypePathologieTable {
 		$this->tableGateway = $tableGateway;
 	}
 	
-	public function getPatientAdmis(){
-
-		var_dump('eeeaaaa'); exit();
-		
-		$rowset = $this->tableGateway->select ( array (
-				'id_admission' => $id_admission
-		) );
-		$row =  $rowset->current ();
-		if (! $row) {
-			$row = null;
+	public function getListeTypePathologieOrdreDecroissant(){
+		return $this->tableGateway->select ( function (Select $select){
+					$select->order('id DESC');
+				})->toArray();
+	}
+	
+	public function insertTypePathologie($tabTypePathologie, $id_employe){
+		for($i = 0 ; $i < count($tabTypePathologie) ; $i++){
+			$this->tableGateway->insert(
+					array(
+							'libelle_type_pathologie' => $tabTypePathologie[$i],
+							'id_medecin' => $id_employe
+			        )
+			);
 		}
-		return $row;
 	}
 	
 }

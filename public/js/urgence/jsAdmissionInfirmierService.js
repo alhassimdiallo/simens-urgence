@@ -1003,6 +1003,8 @@ function getAutoCompletionListeMotifsAdmission(){
 
 	getlisteMotifsAdmissionMultiSelectPlugin2(); 
 	getListePathologiesPopupCorrection();
+	recupererListeTypesPathologies();
+	recupererListeDesPathologies();
 }
 
 function getListePathologiesPopupCorrection(){ 
@@ -1164,7 +1166,6 @@ function modifierMotifsAdmission(){
 	    }
 	  
 	});
-  
 }
   
 function corrigerMotifsAdmission(){
@@ -1197,3 +1198,294 @@ function correctionMotifsAdmission(){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * GESTION DE LA PREMIERE PARTIE
+ */
+var listeTypesPathologiesSelectOption = "";
+function recupererListeTypesPathologiesOptionSelect(){
+	$.ajax({
+		type : 'POST',
+		url : tabUrl[0] + 'public/urgence/liste-types-pathologies-select',
+		data : null,
+		success : function(data) {
+			var result = jQuery.parseJSON(data);
+			listeTypesPathologiesSelectOption = result;
+		}
+	});
+
+}
+
+function ajouterPathologies(){
+	
+	$( "#ajouterPathologies" ).dialog({
+		resizable: false,
+	    height:680,
+	    width:750,
+	    autoOpen: false,
+	    modal: true,
+	    buttons: {
+	        "Fermer": function() {
+              $( this ).dialog( "close" );
+	        }
+	    }
+	});
+  
+	$("#ajouterPathologies").dialog('open');
+	
+	$("#contenuInterfaceAjoutTypePathologies").toggle(false);
+	$(".ligneBoutonsAjout").toggle(true);
+	recupererListeTypesPathologiesOptionSelect();
+	
+}
+
+function recupererListeTypesPathologies(){
+	$.ajax({
+		type : 'POST',
+		url : tabUrl[0] + 'public/urgence/liste-types-pathologies',
+		data : null,
+		success : function(data) {
+			var result = jQuery.parseJSON(data);
+			$('.listeTypePathologiesExistantes table').html(result);
+		}
+	});
+
+}
+
+function recupererListeDesPathologies(){
+	$.ajax({
+		type : 'POST',
+		url : tabUrl[0] + 'public/urgence/liste-pathologies-pour-interface-ajout',
+		data : null,
+		success : function(data) {
+			var result = jQuery.parseJSON(data);
+			$('.listePathologiesExistantes table').html(result);
+		}
+	});
+}
+
+
+function afficherListePathologieDuType(id){
+	$('.listePathologiesExistantes table').html('<tr> <td style="margin-top: 35px; border: 1px solid #ffffff; text-align: center;"> Chargement </td> </tr>  <tr> <td align="center" style="border: 1px solid #ffffff; text-align: center;"> <img style="margin-top: 13px; width: 50px; height: 50px;" src="../images/loading/Chargement_1.gif" /> </td> </tr>');
+	$.ajax({
+		type : 'POST',
+		url : tabUrl[0] + 'public/urgence/liste-pathologies-pour-interface-ajout',
+		data : {'id':id},
+		success : function(data) {
+			var result = jQuery.parseJSON(data); 
+			$('.listePathologiesExistantes table').html(result);
+			
+			$('.LTPE1 a').html("<img src='../img/light/triangle_right.png'>");
+			$('.iconeIndicateurChoix_'+id+' a').html("<img src='../images_icons/greenarrowright.png'>");
+			
+		}
+	});
+}
+
+
+
+/**
+ * GESTION DE LA DEUXIEME PARTIE
+ */
+var variableTypePathologie = 0;
+var variablePathologie = 0;
+
+function ajoutTypePathologie(){
+	variableTypePathologie = 1;
+	variablePathologie = 0;
+	
+	$('.ligneBoutonsAjout').fadeOut(function(){
+		$(".ligneInfosAjoutPathologies .LIATP span").toggle(true);
+		$(".ligneInfosAjoutPathologies .LIAP span").toggle(false);
+		$("#contenuInterfaceAjoutTypePathologies").toggle(true);
+	});
+	
+	$('.interfaceAjoutPathologies .contenuIAPath .identifCAP').remove();
+	
+	if($('.champsAjoutTP').length == 0){
+		ajouterUneNouvelleLignePathologie();
+	}
+}
+
+function ajoutPathologie(){
+	variablePathologie = 1;
+	variableTypePathologie = 0;
+	$('.ligneBoutonsAjout').fadeOut(function(){
+		$(".ligneInfosAjoutPathologies .LIAP span").toggle(true);
+		$(".ligneInfosAjoutPathologies .LIATP span").toggle(false);
+		$("#contenuInterfaceAjoutTypePathologies").toggle(true);
+	});
+	
+	$('.interfaceAjoutPathologies .contenuIAPath .identifCAP').remove();
+	
+	if($('.champsAjoutTP').length == 0){
+		ajouterUneNouvelleLignePathologie();
+	}
+}
+
+function annulerAjoutPathologie(){
+	$('#contenuInterfaceAjoutTypePathologies').fadeOut(function(){
+		$(".ligneBoutonsAjout").toggle(true);
+	});
+}
+
+function ajouterUneNouvelleLignePathologie(){
+	
+	if(variableTypePathologie == 1){
+		
+		var nbLigne = $('.champsAjoutTP').length;
+		
+		var ligne ="<tr class='champsAjoutTP  identifCAP  champsAjoutTP_"+(nbLigne+1)+"'>"+
+	               "<td><input type='text' placeholder='Ecrire un nouveau type de pathologie &agrave; ajouter'></td>"+
+	               "</tr>";
+		
+		$('.interfaceAjoutPathologies .contenuIAPath .champsAjoutTP_'+(nbLigne)).after(ligne);
+		
+		if((nbLigne+1) > 1){ 
+			$('.iconeAnnulerAP').toggle(true);
+		}else if((nbLigne+1) == 1){
+			$('.iconeAnnulerAP').toggle(false);
+		}
+		
+	}else 
+		if(variablePathologie == 1){ 
+			
+			var nbLigne = $('.champsAjoutP').length;
+			
+			var ligne ="<tr class='champsAjoutP  identifCAP  champsAjoutTP_"+(nbLigne+1)+"'>"+
+		               "<td> <select>"+listeTypesPathologiesSelectOption+"</select> <input type='text' placeholder='Ecrire une nouvelle pathologie &agrave; ajouter'></td>"+
+		               "</tr>";
+			
+			$('.interfaceAjoutPathologies .contenuIAPath .champsAjoutTP_'+(nbLigne)).after(ligne);
+			
+			if((nbLigne+1) > 1){ 
+				$('.iconeAnnulerAP').toggle(true);
+			}else if((nbLigne+1) == 1){
+				$('.iconeAnnulerAP').toggle(false);
+			}
+			
+		}
+	
+}
+
+
+function enleverUneLignePathologie(){
+	
+	if(variableTypePathologie == 1){
+		
+		var nbLigne = $('.champsAjoutTP').length;
+		if(nbLigne > 1){
+			$('.champsAjoutTP_'+nbLigne).remove();
+			if(nbLigne == 2){ $('.iconeAnnulerAP').toggle(false); }
+		}
+		
+	}else 
+		if(variablePathologie == 1){ 
+			
+			var nbLigne = $('.champsAjoutP').length; 
+			if(nbLigne > 1){
+				$('.champsAjoutTP_'+nbLigne).remove();
+				if(nbLigne == 2){ $('.iconeAnnulerAP').toggle(false); }
+			}
+			
+		}
+
+}
+
+
+function validerAjoutPathologie(){
+	
+	if(variableTypePathologie == 1){
+		var nbLigne = $('.champsAjoutTP').length;
+
+		var tabTypePathologie = new Array();
+		var j = 0;
+		for(var i=1; i<=nbLigne ; i++){
+			var valeurChamp = $('.champsAjoutTP_'+i+' input').val(); 
+			if(valeurChamp){
+				tabTypePathologie [j++] =  valeurChamp;
+			}
+		}
+		
+		if(tabTypePathologie.length != 0){
+			var reponse = confirm("Confirmer l'enregistrement de(s) type(s) de pathologie");
+			if (reponse == false) { return false; }
+			else{ enregistrementTypePathologie(tabTypePathologie); }
+		}
+		
+	}else
+		if(variablePathologie == 1){ 
+			var nbLigne = $('.champsAjoutP').length;
+			
+			var tabPathologie = new Array();
+			var tabTypePathologie = new Array();
+			var j = 0;
+			for(var i=1; i<=nbLigne ; i++){
+				var valeurChamp = $('.champsAjoutTP_'+i+' input').val();
+				if(valeurChamp){
+					tabPathologie [j] = valeurChamp;
+					tabTypePathologie[j++] = $('.champsAjoutTP_'+i+' select').val();
+				}
+			}
+			
+			if(tabPathologie.length != 0){
+				var reponse = confirm("Confirmer l'enregistrement de(s) pathologie(s)");
+				if (reponse == false) { return false; }
+				else{ enregistrementPathologie(tabTypePathologie, tabPathologie); }
+			}
+			
+		}
+}
+
+
+function enregistrementTypePathologie(tabTypePathologie){
+
+	$('.boutonAVAV button').attr('disabled', true);
+	$('.champsAjoutTP input').attr('disabled', true);
+	$.ajax({
+		type : 'POST',
+		url : tabUrl[0] + 'public/urgence/enregistrement-type-pathologie',
+		data : {'tabTypePathologie' : tabTypePathologie},
+		success : function(data) {
+			
+			$('.listeTypePathologiesExistantes table').html('<tr> <td style="margin-top: 35px; border: 1px solid #ffffff; text-align: center;"> Chargement </td> </tr>  <tr> <td align="center" style="border: 1px solid #ffffff; text-align: center;"> <img style="margin-top: 13px; width: 50px; height: 50px;" src="../images/loading/Chargement_1.gif" /> </td> </tr>');
+			recupererListeTypesPathologies();
+			$('.listePathologiesExistantes table').html('');
+			recupererListeTypesPathologiesOptionSelect();
+			$('.boutonAVAV button').attr('disabled', false);
+			ajoutTypePathologie();
+			
+		}
+	});
+}
+
+function enregistrementPathologie(tabTypePathologie, tabPathologie){
+	
+	$('.boutonAVAV button').attr('disabled', true);
+	$('.champsAjoutP select, .champsAjoutP input').attr('disabled', true);
+	$.ajax({
+		type : 'POST',
+		url : tabUrl[0] + 'public/urgence/enregistrement-pathologie',
+		data : {'tabTypePathologie' : tabTypePathologie, 'tabPathologie' : tabPathologie},
+		success : function(data) {
+			
+			afficherListePathologieDuType(tabTypePathologie[0]);
+			$('.boutonAVAV button').attr('disabled', false);
+			getListePathologiesPopupCorrection();
+			getAutoCompletionListeMotifsAdmission();
+			ajoutPathologie();
+		}
+	});
+}

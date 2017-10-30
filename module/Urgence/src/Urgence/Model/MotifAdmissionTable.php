@@ -87,6 +87,26 @@ class MotifAdmissionTable{
 	
 	
 	
+	/***
+	 * * PARTIE STATISTIQUE ---- PARTIE STATISTIQUE ---- PARTIE STATISTIQUE
+	 * * PARTIE STATISTIQUE ---- PARTIE STATISTIQUE ---- PARTIE STATISTIQUE
+	 * * PARTIE STATISTIQUE ---- PARTIE STATISTIQUE ---- PARTIE STATISTIQUE
+	 */
+	
+	/**
+	 * Récupère la liste des motifs d'admission
+	 * @return liste des motifs d'admission
+	 */
+	public function getListeDesMotifsAdmissionUrgence(){
+		$rowset = $this->tableGateway->select (function (Select $select){
+			$select->join('admission_urgence', 'admission_urgence.id_admission = motif_admission_urgence.id_admission_urgence', array('date'));
+			$select->join('type_pathologie', 'type_pathologie.id = motif_admission_urgence.type_pathologie', array('libelle_type_pathologie'));
+			$select->where(array('type_pathologie != ?' => ''));
+			$select->order('type_pathologie ASC');
+		})->toArray();
+	
+		return $rowset;
+	}
 	
 	
 	

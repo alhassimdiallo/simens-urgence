@@ -158,6 +158,8 @@ $(window).load(function () {
 		<script type="text/javascript">
           initialisation();
         </script>
+        
+        
 	</div>
 
 	<div id="admission_urgence">
@@ -242,6 +244,7 @@ $(window).load(function () {
                       <td style='width: 70%; height: 230px;'>
                         <div style='float: right; margin-right: 40px;'> 
                            <?php if($role != 'infirmier-tri'){ ?>
+                               <img style='cursor: pointer;' src='<?php echo $this->basePath().'/img/light/information.png'?>' />
                                <a href='javascript:corrigerMotifsAdmission();'><img style='cursor: pointer;' src='<?php echo $this->basePath().'/img/light/wizard.png'?>' /></a>
                            <?php } ?>
 
@@ -551,7 +554,7 @@ $(window).load(function () {
      <div id="contenuCorrectionInfos" align="center">
        <div class="multiSelLine"> <img src="<?php echo $this->basePath().'/img/light/arrow_down_left.png';?>" > </div>
        <div class="multiSelLine multiSelLineTitre"> Remplacer par </div>
-       <div class="multiSelLine multiSelLineListeMotifs listeMotifsAdmissionAutoCompletion"> <div class="listeSelectAC"></div> <div class="nouveauPathAC"><img src="<?php echo $this->basePath().'/img/light/plus.png';?>"  title="Ajouter une pathologie" ></div> </div>
+       <div class="multiSelLine multiSelLineListeMotifs listeMotifsAdmissionAutoCompletion"> <div class="listeSelectAC"></div> <div class="nouveauPathAC"><a href="javascript:ajouterPathologies();"><img src="<?php echo $this->basePath().'/img/light/plus.png';?>"  title="Ajouter une pathologie" ></a></div> </div>
        <div class="multiSelLine multiSelLineSubmit"> <button onclick="correctionMotifsAdmission();"> Corriger </button> </div>
        <div class="multiSelLine multiSelLineChargement"> <div>Correction en cours</div> <img src="<?php echo $this->basePath().'/images/loading/Chargement_6.gif';?>" > </div>
        <div class="multiSelLine multiSelLineEffectuer"> <div>Correction effectu&eacute;e avec succ&egrave;s <img src="<?php echo $this->basePath().'/images_icons/tick_16.png';?>" ></div>  </div>
@@ -570,6 +573,125 @@ $(window).load(function () {
    <div class="affichageMessageInfos" align="center"> <div> PAR </div>  </div>
    <div class="affichageMessageInfosRemplace" align="center"> <div>  </div>  </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+<!-- GESTION DE L'INTERFACE D'AJOUT DES TYPES DE PATHOLOGIES ET PATHOLOGIES -->
+<!-- GESTION DE L'INTERFACE D'AJOUT DES TYPES DE PATHOLOGIES ET PATHOLOGIES -->
+<!-- GESTION DE L'INTERFACE D'AJOUT DES TYPES DE PATHOLOGIES ET PATHOLOGIES -->
+
+<div id="ajouterPathologies" title="Ajouter des pathologies" style="display: none;" >
+
+    <table class="lignePathologiesExistantes">
+        <tr>
+            <td>
+               <label> Types de pathologies </label>
+               <div class="listeTypePathologiesExistantes"> 
+                   <table> <!-- Contient la liste des types de pathologies --> </table>
+               </div>
+            </td>
+            <td>
+              <label>  Pathologies </label>
+              <div class="listePathologiesExistantes">
+                  <table> <!-- Contient la liste des pathologies --> </table>
+              </div>
+            </td>
+        </tr>
+    </table>
+    
+    <table class="ligneBoutonsAjout">
+        <tr>
+            <td>
+                <div class="boutonATP"> <button onclick="ajoutTypePathologie();"> Ajouter un type de pathologie </button> </div>
+            </td>
+            <td>
+                <div class="boutonAP"> <button onclick="ajoutPathologie();"> Ajouter une pathologie </button> </div>
+            </td>
+        </tr>
+    </table>
+    
+    <div id="contenuInterfaceAjoutTypePathologies">
+    
+    <table class="ligneInfosAjoutPathologies">
+        <tr> 
+           <td class="LIATP" align="left"><span> <img src='../images_icons/chevrons2.png'> Ajout de types de pathologies </span></td>
+           <td class="LIAP"  align="left"><span> <img src='../images_icons/chevrons2.png'> Ajout de pathologies </span></td>
+        </tr>
+    </table>
+    
+    <table class="interfaceAjoutPathologies">
+        <tr>
+            <td>
+               <div class="contenuIAPath">
+                  <table>
+                     <tr class="champsAjoutTP_0"> </tr>
+                     
+                     <tr>
+                        <td>
+                           <img class='iconeAnnulerAP' onclick='enleverUneLignePathologie();' src='../images_icons/icone_minus.png' >
+                           <img class='iconeAjouterAP' onclick='ajouterUneNouvelleLignePathologie();' src='../images_icons/icone_plus.png' >
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </td>
+        </tr>
+    </table>
+    
+    <table class="ligneBoutonsAnnulerValiderAjout">
+        <tr>
+            <td>
+                <div class="boutonAVAA"> <button onclick="annulerAjoutPathologie();"> Annuler </button> </div>
+            </td>
+            <td>
+                <div class="boutonAVAV"> <button onclick="validerAjoutPathologie();"> Valider </button> </div>
+            </td>
+        </tr>
+    </table>
+    
+    </div>
+    
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- GESTION DE L'INTERFACE D'AFFICHAGE DES RESULTATS STATISTIQUES -->
+<!-- GESTION DE L'INTERFACE D'AFFICHAGE DES RESULTATS STATISTIQUES -->
+<!-- GESTION DE L'INTERFACE D'AFFICHAGE DES RESULTATS STATISTIQUES -->
+
+
+<div id="affichageDonneesStatistiques" title="Afficher d'informations statistiques" style="display: none;" >
+
+
+
+
+
+
+</div>
+
+
+
+
 
 
 <script>
