@@ -1550,6 +1550,30 @@ function afficherInfosStatistiques(){
 }
 
 
+function initialisationListeTypePathologie(){
+	$.ajax({
+		type : 'POST',
+		url : tabUrl[0] + 'public/urgence/liste-type-pathologie-des-motifs-select',
+		data : null,
+		success : function(data) {
+			var result = jQuery.parseJSON(data);
+			$('.optionsTypePath .listeZRI1').html(result);
+		}
+	});
+	
+
+	$('.optionsPeriodePath button').css({'visibility':'hidden'});
+	$('.champOP1 input, .champOP2 input').change(function(){
+		var date_debut = $('.champOP1 input').val();
+		var date_fin = $('.champOP2 input').val();
+		if(date_debut && date_fin){
+			$('.optionsPeriodePath button').css({'visibility':'visible'});
+		}else{ 
+			$('.optionsPeriodePath button').css({'visibility':'hidden'});
+		}
+	});
+}
+
 function getInfosStatistiquesParDefaut(){
 	$.ajax({
 		type : 'POST',
@@ -1557,9 +1581,45 @@ function getInfosStatistiquesParDefaut(){
 		data : null,
 		success : function(data) {
 			var result = jQuery.parseJSON(data);
+			result +="<script>$('.champOP1 input, .champOP2 input').val('').trigger('change'); </script>";
 			$('#affichageInfosStatistiques .zoneResultatsInfosStatiques').html(result);
 		}
 	});
 }
 
+function recupererTypePathologie(id_type_pathologie){
+	$('#listeTableauInfosStatistiques').html('<table align="center" style="margin-top: 25px; margin-bottom: 15px;"> <tr> <td style="margin-top: 35px; border: 1px solid #ffffff; text-align: center;"> Chargement </td> </tr>  <tr> <td align="center" style="border: 1px solid #ffffff; text-align: center;"> <img style="margin-top: 13px; width: 50px; height: 50px;" src="../images/loading/Chargement_1.gif" /> </td> </tr><table>');
+	$.ajax({
+		type : 'POST',
+		url : tabUrl[0] + 'public/urgence/infos-statistiques-optionnelles',
+		data : {'id_type_pathologie' : id_type_pathologie},
+		success : function(data) {
+			var result = jQuery.parseJSON(data); 
+			result +="<script>$('.champOP1 input, .champOP2 input').val('').trigger('change'); </script>";
+			$('#affichageInfosStatistiques .zoneResultatsInfosStatiques').html(result);
+		}
+	});
+}
+
+function getInfosStatistiquesPourPeriode(){
+	var date_debut = $('.champOP1 input').val();
+	var date_fin = $('.champOP2 input').val();
+	var id_type_pathologie = $('.optionsTypePath .listeZRI1 select').val();
+
+	if(date_debut && date_fin){
+		
+		$('#listeTableauInfosStatistiques').html('<table align="center" style="margin-top: 25px; margin-bottom: 15px;"> <tr> <td style="margin-top: 35px; border: 1px solid #ffffff; text-align: center;"> Chargement </td> </tr>  <tr> <td align="center" style="border: 1px solid #ffffff; text-align: center;"> <img style="margin-top: 13px; width: 50px; height: 50px;" src="../images/loading/Chargement_1.gif" /> </td> </tr><table>');
+		$.ajax({
+			type : 'POST',
+			url : tabUrl[0] + 'public/urgence/infos-statistiques-optionnelles-periode',
+			data : {'id_type_pathologie' : id_type_pathologie, 'date_debut':date_debut, 'date_fin':date_fin },
+			success : function(data) {
+				var result = jQuery.parseJSON(data); 
+				$('#affichageInfosStatistiques .zoneResultatsInfosStatiques').html(result);
+			}
+		});
+		
+	}
+	
+}
 

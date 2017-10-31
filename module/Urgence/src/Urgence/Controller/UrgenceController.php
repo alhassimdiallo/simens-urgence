@@ -476,8 +476,8 @@ class UrgenceController extends AbstractActionController {
 		$listeSalles = $this->getPatientTable ()->listeSalles();
 		$formAdmission->get ( 'salle' )->setValueOptions ($listeSalles);
 		
-		//A REVOIR DANS LA PARTI AMELIORATION
-		//A REVOIR DANS LA PARTI AMELIORATION
+		//A REVOIR DANS LA PARTIE AMELIORATION
+		//A REVOIR DANS LA PARTIE AMELIORATION
 // 		$listeLitsParSalles = $this->getPatientTable ()->listeLitsParSalle();
 // 		$liste_select = "";
 // 		for($tS = 0 ; $tS < count($listeLitsParSalles[0]) ; $tS++){
@@ -491,11 +491,14 @@ class UrgenceController extends AbstractActionController {
 
 		//Fin --- A REVOIR DANS LA PARTI AMELIORATION
 		//Fin --- A REVOIR DANS LA PARTI AMELIORATION
-/*
-		$listeDesMotifsAdmission = $this->getMotifAdmissionTable()->getListeDesMotifsAdmissionUrgence();
-		
+
+		//$listeDesMotifsAdmission = $this->getMotifAdmissionTable()->getListeDesMotifsAdmissionUrgence();
+		//$listeDesMotifsAdmission = $this->getMotifAdmissionTable()->getListeDesMotifsAdmissionUrgencePourUnePeriode('2016-05-30', '2017-10-31');
+		//$listeDesMotifsAdmission = $this->getMotifAdmissionTable()->getListeDesMotifsAdmissionUrgencePourUnTypeEtUnePeriode(3, '2016-05-30', '2017-10-31');
+		//$listeDesMotifsAdmission = $this->getMotifAdmissionTable()->getListeDesMotifsAdmissionUrgencePourUnePathologie('Douleur de l\'epigastre');
 		//var_dump($listeDesMotifsAdmission); exit();
 		
+		/*
 		$touteTypePathologie = array();
 		$diffTypePathologie = array();
 		$diffLibelleTypePathologie = array();
@@ -521,6 +524,7 @@ class UrgenceController extends AbstractActionController {
 			}
 		}
 		*/
+		
 		//var_dump($diffLibelleTypePathologie); exit();
 		
 		//var_dump(array_count_values($toutePathologie)); exit();
@@ -532,6 +536,10 @@ class UrgenceController extends AbstractActionController {
 		//var_dump($diffTypePathologie); exit();
 		
 		//var_dump($listeDesMotifsAdmission); exit();
+		
+		
+		//$listeTypePathologies = $this->getMotifAdmissionTable()->getListeTypeDesMotifsAdmissionUrgence();
+		//var_dump($listeTypePathologies); exit();
 		
 		
 		if ($this->getRequest ()->isPost ()) {
@@ -1623,6 +1631,8 @@ class UrgenceController extends AbstractActionController {
                   </tr>
 				</table>';
 		
+		$html .="<div id='listeTableauInfosStatistiques'>";
+		
 		for($i=0 ; $i<count($diffTypePathologie) ; $i++){
 				
 			$prem = 1;
@@ -1652,19 +1662,207 @@ class UrgenceController extends AbstractActionController {
 			$html .="</table>";
 		}
 		
+		$html .="</div>";
 		
 		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
 		return $this->getResponse ()->setContent(Json::encode ( $html ));
 	}
 	
 	
+	public function listeTypePathologieDesMotifsSelectAction()
+	{
+		$html  = "<select onchange='recupererTypePathologie(this.value);' ><option value=''> *** Choisir un type de pathologie *** </option>";
+		$listeTypePathologies = $this->getMotifAdmissionTable()->getListeTypeDesMotifsAdmissionUrgence();
+		for($i = 0 ; $i <  count($listeTypePathologies); $i++){
+			$html .='<option value="'.$listeTypePathologies[$i]['type_pathologie'].'" >'.$listeTypePathologies[$i]['libelle_type_pathologie'].'</option>';
+		}
+		$html .="</select>";
+	
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( $html ));
+	}
+	
+	
+	public function infosStatistiquesOptionnellesAction()
+	{
+		$id_type_pathologie = ( int ) $this->params ()->fromPost ( 'id_type_pathologie', 0 );
+		
+		if($id_type_pathologie != 0){
+			$listeDesMotifsAdmission = $this->getMotifAdmissionTable()->getListeDesMotifsAdmissionUrgencePourUnType($id_type_pathologie);
+		}else{
+			$listeDesMotifsAdmission = $this->getMotifAdmissionTable()->getListeDesMotifsAdmissionUrgence();
+		}
+	
+		$touteTypePathologie = array();
+		$diffTypePathologie = array();
+		$diffLibelleTypePathologie = array();
+	
+		$toutePathologie = array();
+		$diffPathologie = array();
+		$diffPathologieVerifType = array();
+	
+		for($i=0 ; $i < count($listeDesMotifsAdmission) ; $i++){
+				
+			$typePathologie = $listeDesMotifsAdmission[$i]['type_pathologie'];
+			$libelleTypePathologie = $listeDesMotifsAdmission[$i]['libelle_type_pathologie'];
+	
+			$touteTypePathologie[] = $typePathologie;
+			if(!in_array($typePathologie, $diffTypePathologie)){
+				$diffTypePathologie[] = $typePathologie;
+				$diffLibelleTypePathologie[] = $libelleTypePathologie;
+			}
+				
+			$pathologie = $listeDesMotifsAdmission[$i]['libelle_motif'];
+			$toutePathologie[] = $pathologie;
+	
+			if(!in_array($pathologie, $diffPathologie)){
+				$diffPathologie[] = $pathologie;
+				$diffPathologieVerifType[] = array($pathologie, $typePathologie);
+			}
+	
+		}
 	
 	
 	
+		$touteTypePathologieNbVal = array_count_values($touteTypePathologie);
+		$toutePathologieNbVal = array_count_values($toutePathologie);
+	
+		$html ='<table class="titreTableauInfosStatistiques">
+				  <tr class="ligneTitreTableauInfos">
+				    <td rowspan="2" style="width: 35%; height: 40px;">Types de pathologie</td>
+                    <td style="width: 50%; height: 40px;">Pathologies</td>
+                    <td style="width: 15%; height: 40px;">Total</td>
+                  </tr>
+				</table>';
+	
+		$html .="<div id='listeTableauInfosStatistiques'>";
+		
+		for($i=0 ; $i<count($diffTypePathologie) ; $i++){
+	
+			$prem = 1;
+			$html .="<table class='tableauInfosStatistiques'>";
+	
+			for($j=0 ; $j<count($diffPathologieVerifType) ; $j++){
+				if($diffTypePathologie[$i] == $diffPathologieVerifType[$j][1]){
+	
+					if($prem == 1){
+	
+						$html .='<tr style="width: 100%; ">
+						           <td rowspan="'.count($diffPathologieVerifType).'" style="width: 35%; height: 40px; background: re; text-align: center;">'.$diffLibelleTypePathologie[$i].' </br>(Total = '.$touteTypePathologieNbVal[$diffTypePathologie[$i]].')</td>
+						           <td class="infosPath" style="width: 50%; height: 40px; background: yello;">'.$diffPathologieVerifType[$j][0].'</td>
+						           <td class="infosPath" style="width: 15%; height: 40px; background: gree;">'.$toutePathologieNbVal[$diffPathologieVerifType[$j][0]].'</td>
+						         </tr>';
+						$prem++;
+					}else{
+						$html .='<tr style="width: 100%; ">
+                                   <td class="infosPath" style="width: 50%; height: 40px; background: orang;">'.$diffPathologieVerifType[$j][0].'</td>
+                                   <td class="infosPath" style="width: 15%; height: 40px; background: brow;">'.$toutePathologieNbVal[$diffPathologieVerifType[$j][0]].'</td>
+                                 </tr>';
+					}
+	
+				}
+			}
+	
+			$html .="</table>";
+		}
+	
+		$html .="</div>";
+	
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( $html ));
+	}
+	
+	
+	public function infosStatistiquesOptionnellesPeriodeAction()
+	{
+		$id_type_pathologie = ( int ) $this->params ()->fromPost ( 'id_type_pathologie', 0 );
+		$date_debut = $this->params ()->fromPost ( 'date_debut', 0 );
+		$date_fin = $this->params ()->fromPost ( 'date_fin', 0 );
+		
+		if($id_type_pathologie != 0){
+			$listeDesMotifsAdmission = $this->getMotifAdmissionTable()->getListeDesMotifsAdmissionUrgencePourUnTypeEtUnePeriode($id_type_pathologie, $date_debut, $date_fin);
+		}else{
+			$listeDesMotifsAdmission = $this->getMotifAdmissionTable()->getListeDesMotifsAdmissionUrgencePourUnePeriode($date_debut, $date_fin);
+		}
+	
+		$touteTypePathologie = array();
+		$diffTypePathologie = array();
+		$diffLibelleTypePathologie = array();
+	
+		$toutePathologie = array();
+		$diffPathologie = array();
+		$diffPathologieVerifType = array();
+	
+		for($i=0 ; $i < count($listeDesMotifsAdmission) ; $i++){
+	
+			$typePathologie = $listeDesMotifsAdmission[$i]['type_pathologie'];
+			$libelleTypePathologie = $listeDesMotifsAdmission[$i]['libelle_type_pathologie'];
+	
+			$touteTypePathologie[] = $typePathologie;
+			if(!in_array($typePathologie, $diffTypePathologie)){
+				$diffTypePathologie[] = $typePathologie;
+				$diffLibelleTypePathologie[] = $libelleTypePathologie;
+			}
+	
+			$pathologie = $listeDesMotifsAdmission[$i]['libelle_motif'];
+			$toutePathologie[] = $pathologie;
+	
+			if(!in_array($pathologie, $diffPathologie)){
+				$diffPathologie[] = $pathologie;
+				$diffPathologieVerifType[] = array($pathologie, $typePathologie);
+			}
+	
+		}
 	
 	
 	
+		$touteTypePathologieNbVal = array_count_values($touteTypePathologie);
+		$toutePathologieNbVal = array_count_values($toutePathologie);
 	
+		$html ='<table class="titreTableauInfosStatistiques">
+				  <tr class="ligneTitreTableauInfos">
+				    <td rowspan="2" style="width: 35%; height: 40px;">Types de pathologie</td>
+                    <td style="width: 50%; height: 40px;">Pathologies</td>
+                    <td style="width: 15%; height: 40px;">Total</td>
+                  </tr>
+				</table>';
+	
+		$html .="<div id='listeTableauInfosStatistiques'>";
+	
+		for($i=0 ; $i<count($diffTypePathologie) ; $i++){
+	
+			$prem = 1;
+			$html .="<table class='tableauInfosStatistiques'>";
+	
+			for($j=0 ; $j<count($diffPathologieVerifType) ; $j++){
+				if($diffTypePathologie[$i] == $diffPathologieVerifType[$j][1]){
+	
+					if($prem == 1){
+	
+						$html .='<tr style="width: 100%; ">
+						           <td rowspan="'.count($diffPathologieVerifType).'" style="width: 35%; height: 40px; background: re; text-align: center;">'.$diffLibelleTypePathologie[$i].' </br>(Total = '.$touteTypePathologieNbVal[$diffTypePathologie[$i]].')</td>
+						           <td class="infosPath" style="width: 50%; height: 40px; background: yello;">'.$diffPathologieVerifType[$j][0].'</td>
+						           <td class="infosPath" style="width: 15%; height: 40px; background: gree;">'.$toutePathologieNbVal[$diffPathologieVerifType[$j][0]].'</td>
+						         </tr>';
+						$prem++;
+					}else{
+						$html .='<tr style="width: 100%; ">
+                                   <td class="infosPath" style="width: 50%; height: 40px; background: orang;">'.$diffPathologieVerifType[$j][0].'</td>
+                                   <td class="infosPath" style="width: 15%; height: 40px; background: brow;">'.$toutePathologieNbVal[$diffPathologieVerifType[$j][0]].'</td>
+                                 </tr>';
+					}
+	
+				}
+			}
+	
+			$html .="</table>";
+		}
+	
+		$html .="</div>";
+	
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( $html ));
+	}
 	
 	
 	

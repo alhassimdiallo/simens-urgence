@@ -11,6 +11,11 @@ class TypePathologieTable {
 		$this->tableGateway = $tableGateway;
 	}
 	
+	public function getListeTypePathologie(){
+		$rowset = $this->tableGateway->select ( )->toArray();
+		return $rowset;
+	}
+	
 	public function getListeTypePathologieOrdreDecroissant(){
 		return $this->tableGateway->select ( function (Select $select){
 					$select->order('id DESC');

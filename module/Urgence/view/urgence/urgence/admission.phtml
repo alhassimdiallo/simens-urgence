@@ -682,8 +682,20 @@ $(window).load(function () {
 
 <div id="affichageInfosStatistiques" title="Afficher des informations statistiques" style="display: none;" >
 
-<div class="optionsTypeEtPathologie"></div>
-<div class="optionsPeriode"></div>
+<div class="optionsTypeEtPathologie" align="center">
+    <div class="optionsTypePath" align="center">
+           <div class="listeZRI1"></div> 
+           <div class="listeZRI2"><select></select></div>
+    </div>       
+</div>
+<div class="optionsPeriode" align="center">
+    <div class="optionsPeriodePath" align="center">
+           <div class="champOP1"><input type="date"></div> 
+           <div class="champOP2"><input type="date"><button onclick="getInfosStatistiquesPourPeriode();">Afficher</button></div>
+    </div>    
+</div>
+
+
 <div class="zoneResultatsInfosStatiques"></div>
 
 </div>
@@ -717,5 +729,6 @@ $(function(){
 //************************************
 //************************************
   getAutoCompletionListeMotifsAdmission();
+  initialisationListeTypePathologie();
 
 </script>

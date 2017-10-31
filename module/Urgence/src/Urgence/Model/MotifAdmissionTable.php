@@ -108,7 +108,90 @@ class MotifAdmissionTable{
 		return $rowset;
 	}
 	
+	/**
+	 * Récupérer la liste des motifs d'admission pour un type de pathologie donné
+	 * @param $id_type_pathologie
+	 * @return liste des motifs d'un type donné
+	 */
+	public function getListeDesMotifsAdmissionUrgencePourUnType($id_type_pathologie){
+		$rowset = $this->tableGateway->select (function (Select $select) use ($id_type_pathologie){
+			$select->join('admission_urgence', 'admission_urgence.id_admission = motif_admission_urgence.id_admission_urgence', array('date'));
+			$select->join('type_pathologie', 'type_pathologie.id = motif_admission_urgence.type_pathologie', array('libelle_type_pathologie'));
+			$select->where(array('type_pathologie != ?' => '', 'type_pathologie' => $id_type_pathologie));
+			$select->order('type_pathologie ASC');
+		})->toArray();
 	
+		return $rowset;
+	}
+	
+	/**
+	 * Récupérer la liste des motifs d'admission pour une pathologie donnée
+	 * @param $id_type_pathologie
+	 * @return liste des motifs d'une pathologie donnée
+	 */
+	public function getListeDesMotifsAdmissionUrgencePourUnePathologie($libelle_pathologie){
+		$rowset = $this->tableGateway->select (function (Select $select) use ($libelle_pathologie){
+			$select->join('admission_urgence', 'admission_urgence.id_admission = motif_admission_urgence.id_admission_urgence', array('date'));
+			$select->join('type_pathologie', 'type_pathologie.id = motif_admission_urgence.type_pathologie', array('libelle_type_pathologie'));
+			$select->where(array('type_pathologie != ?' => '', 'libelle_motif' => $libelle_pathologie));
+			$select->order('type_pathologie ASC');
+		})->toArray();
+	
+		return $rowset;
+	}
+	
+	/**
+	 * @return liste des types de motifs d'admission
+	 */
+	public function getListeTypeDesMotifsAdmissionUrgence(){
+		$rowset = $this->tableGateway->select (function (Select $select){
+			$select->join('admission_urgence', 'admission_urgence.id_admission = motif_admission_urgence.id_admission_urgence', array('date'));
+			$select->join('type_pathologie', 'type_pathologie.id = motif_admission_urgence.type_pathologie', array('libelle_type_pathologie'));
+			$select->where(array('type_pathologie != ?' => ''));
+			$select->group('type_pathologie');
+			$select->order('type_pathologie ASC');
+		})->toArray();
+	
+		return $rowset;
+	}
+	
+	
+	
+	/**
+	 * Récupérer la liste des motifs d'admission pour une période donnée
+	 */
+	public function getListeDesMotifsAdmissionUrgencePourUnePeriode($date_debut, $date_fin){
+		$rowset = $this->tableGateway->select (function (Select $select) use($date_debut, $date_fin){
+			$select->join('admission_urgence', 'admission_urgence.id_admission = motif_admission_urgence.id_admission_urgence', array('date'));
+			$select->join('type_pathologie', 'type_pathologie.id = motif_admission_urgence.type_pathologie', array('libelle_type_pathologie'));
+			$select->where(array('type_pathologie != ?' => '',
+					'date >= ?' => $date_debut,
+					'date <= ?' => $date_fin,
+			));
+			$select->order('type_pathologie ASC');
+		})->toArray();
+	
+		return $rowset;
+	}
+	
+	
+	/**
+	 * Récupérer la liste des motifs d'admission pour un type de pathologie et une période donnée
+	 */
+	public function getListeDesMotifsAdmissionUrgencePourUnTypeEtUnePeriode($id_type_pathologie, $date_debut, $date_fin){
+		$rowset = $this->tableGateway->select (function (Select $select) use ($id_type_pathologie, $date_debut, $date_fin){
+			$select->join('admission_urgence', 'admission_urgence.id_admission = motif_admission_urgence.id_admission_urgence', array('date'));
+			$select->join('type_pathologie', 'type_pathologie.id = motif_admission_urgence.type_pathologie', array('libelle_type_pathologie'));
+			$select->where(array('type_pathologie != ?' => '', 
+					             'type_pathologie' => $id_type_pathologie,
+					             'date >= ?' => $date_debut,
+              					 'date <= ?' => $date_fin,
+			              ));
+			$select->order('type_pathologie ASC');
+		})->toArray();
+	
+		return $rowset;
+	}
 	
 	
 	
